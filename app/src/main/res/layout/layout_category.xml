@@ -50,12 +50,14 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_category" />
 
-        <TextView
-            android:id="@+id/text_view_more"
+        <Button
+            android:id="@+id/button_view_all"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp_30"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_3"
             android:layout_marginTop="@dimen/dp_10"
             android:text="@string/text_view_all"
+            style="@style/ViewMore"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/recycler_category" />

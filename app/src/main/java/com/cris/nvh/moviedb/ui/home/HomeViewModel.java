@@ -34,6 +34,7 @@ public class HomeViewModel extends BaseObservable {
     public final ObservableList<ObservableList<Movie>> listCategoryMovies;
     public final ObservableList<String> categoryStringObservable;
     public final ObservableBoolean isLoadingSuccess;
+    private static final int DEFAULT_PAGE = 1;
     private static final int FIRST_PAGE = 1;
     private static final int FIRST_INDEX = 0;
     private static final int LAST_INDEX = 5;
@@ -180,6 +181,26 @@ public class HomeViewModel extends BaseObservable {
                     @Override
                     public void accept(GenreResponse genreResponse) throws Exception {
                         genresObservable.addAll(genreResponse.getGenres());
+                        loadGenreMovies(FIRST_INDEX);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        handleError(throwable.getMessage());
+                    }
+                });
+        mCompositeDisposable.add(disposable);
+    }
+
+    private void loadGenreMovies(int position) {
+        Disposable disposable = mMovieRepository
+                .getMoviesByGenre(genresObservable.get(position).getId(), DEFAULT_PAGE)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<MovieResponse>() {
+                    @Override
+                    public void accept(MovieResponse movieResponse) throws Exception {
+                        genreMoviesObservable.addAll(movieResponse.getMovies().subList(FIRST_INDEX, LAST_INDEX));
                     }
                 }, new Consumer<Throwable>() {
                     @Override
