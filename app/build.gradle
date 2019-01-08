@@ -4,6 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         buildConfigField "String", "API_KEY", "\"${API_KEY}\""
+        buildConfigField "String", "YOUTUBE_API_KEY", "\"${YOUTUBE_API_KEY}\""
         applicationId "com.cris.nvh.moviedb"
         minSdkVersion 17
         targetSdkVersion 28
@@ -24,7 +25,7 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.5'
@@ -48,4 +49,5 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation files('libs/YouTubeAndroidPlayerApi.jar')
 }
