@@ -3,7 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data></data>
+    <data>
+
+        <variable
+            name="homeVM"
+            type="com.cris.nvh.moviedb.ui.home.HomeViewModel" />
+
+    </data>
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -74,7 +80,7 @@
                 android:id="@+id/spinner_genres"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/dp_3"
+                android:layout_marginRight="@dimen/dp_3"
                 android:minHeight="@dimen/dp_40"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -117,7 +123,9 @@
             android:id="@+id/recycler_categories"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
 
     </android.support.design.widget.CoordinatorLayout>
 

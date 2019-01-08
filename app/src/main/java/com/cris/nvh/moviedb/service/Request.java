@@ -15,34 +15,34 @@ import retrofit2.http.Query;
  */
 
 public interface Request {
-	@GET("genre/movie/list")
-	Observable<GenreResponse> getGenres();
+    @GET("genre/movie/list")
+    Observable<GenreResponse> getGenres();
 
-	@GET("trending/movie/day")
-	Observable<MovieResponse> getMoviesTrendingByDay();
+    @GET("trending/movie/day")
+    Observable<MovieResponse> getMoviesTrendingByDay();
 
-	@GET("discover/movie")
-	Observable<MovieResponse> getMoviesByGenre(@Query("with_genres") String genreId,
-	                                           @Query("page") int page);
+    @GET("discover/movie")
+    Observable<MovieResponse> getMoviesByGenre(@Query("with_genres") String genreId,
+                                               @Query("page") int page);
 
-	@GET("discover/movie")
-	Observable<MovieResponse> getMoviesByCast(@Query("with_cast") String castId,
-	                                          @Query("page") int page);
+    @GET("discover/movie")
+    Observable<MovieResponse> getMoviesByCast(@Query("with_cast") String castId,
+                                              @Query("page") int page);
 
-	@GET("discover/movie")
-	Observable<MovieResponse> getMoviesByCompany(@Query("with_companies") String CompanyId,
-	                                             @Query("page") int page);
+    @GET("discover/movie")
+    Observable<MovieResponse> getMoviesByCompany(@Query("with_companies") String CompanyId,
+                                                 @Query("page") int page);
 
-	@GET("movie/{type}")
-	Observable<MovieResponse> getMoviesCategory(@Path("type") String type,
-	                                            @Query("page") int page);
+    @GET("movie/{type}")
+    Observable<MovieResponse> getMoviesCategory(@Path("type") String type,
+                                                @Query("page") int page);
 
-	@GET("movie/{movie_id}")
-	Observable<Movie> getMovieDetail(@Path("movie_id") int id,
-	                                 @Query("append_to_response") String value);
+    @GET("movie/{movie_id}")
+    Observable<Movie> getMovieDetail(@Path("movie_id") int id,
+                                     @Query("append_to_response") String value);
 
-	@GET("search/{type}")
-	Observable<MovieResponse> searchMovie(@Path("type") String type,
-	                                        @Query("query") String keyword,
-	                                        @Query("page") int page);
+    @GET("search/{type}")
+    Observable<MovieResponse> searchMovie(@Path("type") String type,
+                                          @Query("query") String keyword,
+                                          @Query("page") int page);
 }

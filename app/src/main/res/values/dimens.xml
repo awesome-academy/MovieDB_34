@@ -14,5 +14,6 @@
     <dimen name="dp_30">30dp</dimen>
     <dimen name="dp_5">5dp</dimen>
     <dimen name="sp_8">8sp</dimen>
-    <dimen name="dp_sub18"></dimen>
+    <dimen name="dp_sub18">-18dp</dimen>
+    <dimen name="dp_8">8dp</dimen>
 </resources>

@@ -1,12 +1,14 @@
 package com.cris.nvh.moviedb.data.repository;
 
 import android.databinding.ObservableArrayList;
+
 import com.cris.nvh.moviedb.data.model.GenreResponse;
 import com.cris.nvh.moviedb.data.model.Movie;
 import com.cris.nvh.moviedb.data.model.MovieResponse;
 import com.cris.nvh.moviedb.data.source.MovieDataSource;
 import com.cris.nvh.moviedb.data.source.local.LocalDataSource;
 import com.cris.nvh.moviedb.data.source.remote.RemoteDataSource;
+
 import io.reactivex.Observable;
 
 /**
@@ -53,7 +55,7 @@ public class MovieRepository implements MovieDataSource.Local, MovieDataSource.R
 
     @Override
     public Observable<MovieResponse> getMoviesByCategory(String category, int page) {
-        return null;
+        return mRemote.getMoviesByCategory(category, page);
     }
 
     @Override
@@ -73,7 +75,7 @@ public class MovieRepository implements MovieDataSource.Local, MovieDataSource.R
 
     @Override
     public Observable<MovieResponse> getMoviesTrendingByDay() {
-        return null;
+        return mRemote.getMoviesTrendingByDay();
     }
 
     @Override
@@ -83,7 +85,7 @@ public class MovieRepository implements MovieDataSource.Local, MovieDataSource.R
 
     @Override
     public Observable<GenreResponse> getGenres() {
-        return null;
+        return mRemote.getGenres();
     }
 
     @Override

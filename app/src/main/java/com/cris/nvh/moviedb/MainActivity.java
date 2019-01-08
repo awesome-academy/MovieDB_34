@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements
         mBottomNavigation = findViewById(R.id.navigation);
         mViewpager.setOnPageChangeListener(this);
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new HomeFragment());
+        adapter.addFragment(HomeFragment.newInstance());
         mViewpager.setAdapter(adapter);
         mBottomNavigation.setOnNavigationItemSelectedListener(this);
     }

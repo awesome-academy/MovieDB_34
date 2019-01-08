@@ -11,6 +11,7 @@
 
     <style name="DarkTheme" parent="@style/Theme.AppCompat">
         <item name="windowNoTitle">true</item>
+        <item name="android:textColor">@color/color_white</item>
     </style>
 
 </resources>
