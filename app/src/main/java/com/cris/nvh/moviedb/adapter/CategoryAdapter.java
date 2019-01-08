@@ -5,6 +5,7 @@ import android.databinding.ObservableArrayList;
 import android.databinding.ObservableList;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.cris.nvh.moviedb.R;
@@ -21,8 +22,10 @@ import com.cris.nvh.moviedb.util.MovieViewModel;
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
     private ObservableList<ObservableList<Movie>> mMovies;
     private ObservableList<String> mCategories;
+    private CategoryClickListener mListener;
 
-    public CategoryAdapter() {
+    public CategoryAdapter(CategoryClickListener listener) {
+        mListener = listener;
         mMovies = new ObservableArrayList<>();
         mCategories = new ObservableArrayList<>();
     }
@@ -32,7 +35,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         LayoutCategoryBinding categoryBinding =
                 DataBindingUtil.inflate(inflater, R.layout.layout_category, viewGroup, false);
-        return new CategoryViewHolder(categoryBinding);
+        return new CategoryViewHolder(categoryBinding, mListener);
     }
 
     @Override
@@ -52,13 +55,18 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         notifyDataSetChanged();
     }
 
-    public static class CategoryViewHolder extends RecyclerView.ViewHolder {
+    public static class CategoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private LayoutCategoryBinding mCategoryBinding;
+        private CategoryClickListener mListener;
 
-        public CategoryViewHolder(LayoutCategoryBinding binding) {
+        public CategoryViewHolder(LayoutCategoryBinding binding, CategoryClickListener listener) {
             super(binding.getRoot());
+            mListener = listener;
             mCategoryBinding = binding;
-            mCategoryBinding.recyclerCategory.setAdapter(new MoviesAdapter());
+            mCategoryBinding.recyclerCategory.setAdapter(
+                    new MoviesAdapter((MoviesAdapter.MovieItemClickListener) mListener));
+            mCategoryBinding.textCategory.setOnClickListener(this);
+            mCategoryBinding.buttonViewAll.setOnClickListener(this);
         }
 
         public void bindData(ObservableList<Movie> movies, String category) {
@@ -66,10 +74,17 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             mCategoryBinding.setCategoryMovies(movies);
         }
 
+        @Override
+        public void onClick(View view) {
+            mListener.onCategoryClick(mCategoryBinding.textCategory.getText().toString());
+        }
+
         public static class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder> {
             private ObservableList<Movie> mMovies;
+            private MovieItemClickListener mListener;
 
-            public MoviesAdapter() {
+            public MoviesAdapter(MovieItemClickListener listener) {
+                mListener = listener;
                 mMovies = new ObservableArrayList<>();
             }
 
@@ -81,7 +96,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                         viewGroup,
                         false
                 );
-                return new MovieViewHolder(binding);
+                return new MovieViewHolder(binding, mListener);
             }
 
             @Override
@@ -100,20 +115,36 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                 notifyDataSetChanged();
             }
 
-            public static class MovieViewHolder extends RecyclerView.ViewHolder {
+            public static class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
                 private ItemMovieBinding mMovieBinding;
+                private MovieItemClickListener mListener;
 
-                public MovieViewHolder(ItemMovieBinding binding) {
+                public MovieViewHolder(ItemMovieBinding binding, MovieItemClickListener listener) {
                     super(binding.getRoot());
                     mMovieBinding = binding;
+                    mListener = listener;
                 }
 
                 public void bindData(Movie movie) {
                     mMovieBinding.setMovieVM(new MovieViewModel());
                     mMovieBinding.getMovieVM().setMovie(movie);
+                    mMovieBinding.itemMovie.setOnClickListener(this);
                     mMovieBinding.executePendingBindings();
                 }
+
+                @Override
+                public void onClick(View view) {
+                    mListener.onMovieItemClick(mMovieBinding.getMovieVM().getMovie());
+                }
+            }
+
+            public interface MovieItemClickListener {
+                void onMovieItemClick(Movie movie);
             }
         }
+    }
+
+    public interface CategoryClickListener {
+        void onCategoryClick(String type);
     }
 }

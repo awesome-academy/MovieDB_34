@@ -20,11 +20,13 @@ import java.util.List;
  * Contact: toiyeuthethao1997@gmail.com
  */
 
-public class SlideAdapter extends PagerAdapter {
+public class SlideAdapter extends PagerAdapter implements View.OnClickListener {
     private ObservableList<Movie> mMovies;
     private int mCurrentPosition;
+    private TopTrendingClickListener mListener;
 
-    public SlideAdapter() {
+    public SlideAdapter(TopTrendingClickListener listener) {
+        mListener = listener;
         mMovies = new ObservableArrayList<>();
     }
 
@@ -37,6 +39,7 @@ public class SlideAdapter extends PagerAdapter {
             binding.setMovieVM(new MovieViewModel());
         }
         binding.getMovieVM().setMovie(mMovies.get(position));
+        binding.imageSlide.setOnClickListener(this);
         binding.executePendingBindings();
         return binding.getRoot();
 
@@ -64,7 +67,16 @@ public class SlideAdapter extends PagerAdapter {
         notifyDataSetChanged();
     }
 
-    private void setCurrentPosition(int position) {
+    @Override
+    public void onClick(View view) {
+        mListener.onTopTrendingClick(mMovies.get(mCurrentPosition));
+    }
+
+    public interface TopTrendingClickListener {
+        void onTopTrendingClick(Movie movie);
+    }
+
+    public void setCurrentPosition(int position) {
         mCurrentPosition = position;
     }
 }

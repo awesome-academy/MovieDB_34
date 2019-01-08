@@ -76,7 +76,7 @@ public class Movie implements Parcelable {
         parcel.writeString(mReleaseDate);
         parcel.writeString(mTitle);
         parcel.writeString(mStatus);
-        parcel.writeDouble(mVoteAverage);
+        parcel.writeFloat(mVoteAverage);
         parcel.writeInt(mVoteCount);
 
     }
@@ -151,6 +151,6 @@ public class Movie implements Parcelable {
     }
 
     public float calculateVoteRating() {
-        return (mVoteAverage / 2);
+        return mVoteAverage / 2;
     }
 }
