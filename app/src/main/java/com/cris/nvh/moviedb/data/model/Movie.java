@@ -1,4 +1,4 @@
-package com.cris.nvh.moviedb.data.model.data;
+package com.cris.nvh.moviedb.data.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
