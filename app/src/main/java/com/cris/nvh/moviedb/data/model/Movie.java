@@ -13,140 +13,144 @@ import java.util.List;
  */
 
 public class Movie implements Parcelable {
-	@SerializedName("backdrop_path")
-	private String mBackdropPath;
-	@SerializedName("genres")
-	private List<Genre> mGenres;
-	@SerializedName("videos")
-	private VideoResponse mVideoResponse;
-	@SerializedName("production_companies")
-	private List<Company> mCompanies;
-	@SerializedName("credits")
-	private Credit mCredits;
-	@SerializedName("id")
-	private int mId;
-	@SerializedName("overview")
-	private String mOverview;
-	@SerializedName("poster_path")
-	private String mPosterPath;
-	@SerializedName("release_date")
-	private String mReleaseDate;
-	@SerializedName("title")
-	private String mTitle;
-	@SerializedName("status")
-	private String mStatus;
-	@SerializedName("vote_average")
-	private double mVoteAverage;
-	@SerializedName("vote_count")
-	private int mVoteCount;
+    @SerializedName("backdrop_path")
+    private String mBackdropPath;
+    @SerializedName("genres")
+    private List<Genre> mGenres;
+    @SerializedName("videos")
+    private VideoResponse mVideoResponse;
+    @SerializedName("production_companies")
+    private List<Company> mCompanies;
+    @SerializedName("credits")
+    private Credit mCredits;
+    @SerializedName("id")
+    private int mId;
+    @SerializedName("overview")
+    private String mOverview;
+    @SerializedName("poster_path")
+    private String mPosterPath;
+    @SerializedName("release_date")
+    private String mReleaseDate;
+    @SerializedName("title")
+    private String mTitle;
+    @SerializedName("status")
+    private String mStatus;
+    @SerializedName("vote_average")
+    private float mVoteAverage;
+    @SerializedName("vote_count")
+    private int mVoteCount;
 
-	public Movie(){
+    public Movie() {
     }
 
-	public Movie(int id) {
-		mId = id;
-	}
+    public Movie(int id) {
+        mId = id;
+    }
 
-	protected Movie(Parcel in) {
-		mBackdropPath = in.readString();
-		mGenres = in.readArrayList(Genre.class.getClassLoader());
-		mVideoResponse = in.readParcelable(VideoResponse.class.getClassLoader());
-		mCompanies = in.readArrayList(Company.class.getClassLoader());
-		mCredits = in.readParcelable(Credit.class.getClassLoader());
-		mId = in.readInt();
-		mOverview = in.readString();
-		mPosterPath = in.readString();
-		mReleaseDate = in.readString();
-		mTitle = in.readString();
-		mStatus = in.readString();
-		mVoteAverage = in.readDouble();
-		mVoteCount = in.readInt();
-	}
+    protected Movie(Parcel in) {
+        mBackdropPath = in.readString();
+        mGenres = in.readArrayList(Genre.class.getClassLoader());
+        mVideoResponse = in.readParcelable(VideoResponse.class.getClassLoader());
+        mCompanies = in.readArrayList(Company.class.getClassLoader());
+        mCredits = in.readParcelable(Credit.class.getClassLoader());
+        mId = in.readInt();
+        mOverview = in.readString();
+        mPosterPath = in.readString();
+        mReleaseDate = in.readString();
+        mTitle = in.readString();
+        mStatus = in.readString();
+        mVoteAverage = in.readFloat();
+        mVoteCount = in.readInt();
+    }
 
-	@Override
-	public void writeToParcel(Parcel parcel, int i) {
-		parcel.writeString(mBackdropPath);
-		parcel.writeList(mGenres);
-		parcel.writeParcelable(mVideoResponse, 0);
-		parcel.writeList(mCompanies);
-		parcel.writeParcelable(mCredits, 0);
-		parcel.writeInt(mId);
-		parcel.writeString(mOverview);
-		parcel.writeString(mPosterPath);
-		parcel.writeString(mReleaseDate);
-		parcel.writeString(mTitle);
-		parcel.writeString(mStatus);
-		parcel.writeDouble(mVoteAverage);
-		parcel.writeInt(mVoteCount);
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(mBackdropPath);
+        parcel.writeList(mGenres);
+        parcel.writeParcelable(mVideoResponse, 0);
+        parcel.writeList(mCompanies);
+        parcel.writeParcelable(mCredits, 0);
+        parcel.writeInt(mId);
+        parcel.writeString(mOverview);
+        parcel.writeString(mPosterPath);
+        parcel.writeString(mReleaseDate);
+        parcel.writeString(mTitle);
+        parcel.writeString(mStatus);
+        parcel.writeDouble(mVoteAverage);
+        parcel.writeInt(mVoteCount);
 
-	}
+    }
 
-	@Override
-	public int describeContents() {
-		return 0;
-	}
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
-	public static final Creator<Movie> CREATOR = new Creator<Movie>() {
-		@Override
-		public Movie createFromParcel(Parcel in) {
-			return new Movie(in);
-		}
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
 
-		@Override
-		public Movie[] newArray(int size) {
-			return new Movie[size];
-		}
-	};
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 
-	public String getBackdropPath() {
-		return mBackdropPath;
-	}
+    public String getBackdropPath() {
+        return mBackdropPath;
+    }
 
-	public List<Genre> getGenres() {
-		return mGenres;
-	}
+    public List<Genre> getGenres() {
+        return mGenres;
+    }
 
-	public VideoResponse getVideoResponse() {
-		return mVideoResponse;
-	}
+    public VideoResponse getVideoResponse() {
+        return mVideoResponse;
+    }
 
-	public List<Company> getCompanies() {
-		return mCompanies;
-	}
+    public List<Company> getCompanies() {
+        return mCompanies;
+    }
 
-	public Credit getCredits() {
-		return mCredits;
-	}
+    public Credit getCredits() {
+        return mCredits;
+    }
 
-	public int getId() {
-		return mId;
-	}
+    public int getId() {
+        return mId;
+    }
 
-	public String getOverview() {
-		return mOverview;
-	}
+    public String getOverview() {
+        return mOverview;
+    }
 
-	public String getPosterPath() {
-		return mPosterPath;
-	}
+    public String getPosterPath() {
+        return mPosterPath;
+    }
 
-	public String getReleaseDate() {
-		return mReleaseDate;
-	}
+    public String getReleaseDate() {
+        return mReleaseDate;
+    }
 
-	public String getTitle() {
-		return mTitle;
-	}
+    public String getTitle() {
+        return mTitle;
+    }
 
-	public String getStatus() {
-		return mStatus;
-	}
+    public String getStatus() {
+        return mStatus;
+    }
 
-	public double getVoteAverage() {
-		return mVoteAverage;
-	}
+    public float getVoteAverage() {
+        return mVoteAverage;
+    }
 
-	public int getVoteCount() {
-		return mVoteCount;
-	}
+    public int getVoteCount() {
+        return mVoteCount;
+    }
+
+    public float calculateVoteRating() {
+        return (mVoteAverage / 2);
+    }
 }

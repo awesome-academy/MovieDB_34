@@ -73,62 +73,74 @@
             app:layout_anchor="@id/app_bar"
             app:layout_anchorGravity="bottom|right" />
 
-        <android.support.constraint.ConstraintLayout
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom">
+            android:layout_marginTop="@dimen/dp_15"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <Spinner
-                android:id="@+id/spinner_genres"
-                spinnerAdapter="@{homeVM.genresObservable}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/dp_3"
-                android:minHeight="@dimen/dp_40"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/text_genres"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_genres"
-                app:layout_constraintBottom_toBottomOf="@id/spinner_genres"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/spinner_genres" />
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_categories"
+                    bindCategories="@{homeVM.listCategoryMovies}"
+                    bindCategoryString="@{homeVM.categoryStringObservable}"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_genres"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:bindMovies="@{homeVM.genreMoviesObservable}"
-                app:layout_constraintBottom_toTopOf="@id/button_view_all"
-                app:layout_constraintEnd_toEndOf="@id/spinner_genres"
-                app:layout_constraintStart_toStartOf="@id/text_genres"
-                app:layout_constraintTop_toBottomOf="@id/spinner_genres" />
+                <Spinner
+                    android:id="@+id/spinner_genres"
+                    spinnerAdapter="@{homeVM.genresObservable}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/dp_3"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/recycler_categories" />
 
-            <Button
-                android:id="@+id/button_view_all"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/dp_30"
-                android:layout_marginBottom="@dimen/dp_3"
-                android:layout_marginEnd="@dimen/dp_15"
-                android:layout_marginStart="@dimen/dp_15"
-                android:layout_marginTop="@dimen/dp_5"
-                android:text="@string/text_view_all"
-                android:textSize="@dimen/sp_8"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recycler_genres" />
+                <TextView
+                    android:id="@+id/text_genres"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_3"
+                    android:text="@string/text_genres"
+                    android:textColor="@color/yellow"
+                    android:textSize="@dimen/sp_24"
+                    app:layout_constraintBottom_toBottomOf="@id/spinner_genres"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/spinner_genres" />
 
-        </android.support.constraint.ConstraintLayout>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_genres"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:bindMovies="@{homeVM.genreMoviesObservable}"
+                    app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toTopOf="@id/button_view_all"
+                    app:layout_constraintEnd_toEndOf="@id/spinner_genres"
+                    app:layout_constraintStart_toStartOf="@id/text_genres"
+                    app:layout_constraintTop_toBottomOf="@id/spinner_genres" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_categories"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:bindCategories="@{homeVM.categoryMovies}"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+                <Button
+                    android:id="@+id/button_view_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_30"
+                    android:layout_marginBottom="@dimen/dp_3"
+                    android:layout_marginEnd="@dimen/dp_15"
+                    android:layout_marginStart="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:text="@string/text_view_all"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/recycler_genres" />
+
+            </android.support.constraint.ConstraintLayout>
+
+        </android.support.v4.widget.NestedScrollView>
 
     </android.support.design.widget.CoordinatorLayout>
 

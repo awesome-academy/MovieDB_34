@@ -16,4 +16,8 @@
     <dimen name="sp_8">8sp</dimen>
     <dimen name="dp_sub18">-18dp</dimen>
     <dimen name="dp_8">8dp</dimen>
+    <dimen name="dp_90">90dp</dimen>
+    <dimen name="sp_24">24sp</dimen>
+    <dimen name="dp_46">46dp</dimen>
+    <dimen name="sp_15">15sp</dimen>
 </resources>

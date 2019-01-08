@@ -1,15 +1,17 @@
 package com.cris.nvh.moviedb.adapter;
 
+import android.databinding.DataBindingUtil;
+import android.databinding.ObservableArrayList;
+import android.databinding.ObservableList;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.cris.nvh.moviedb.R;
 import com.cris.nvh.moviedb.data.model.Movie;
-import com.cris.nvh.moviedb.data.model.MovieResponse;
-
-import java.util.List;
+import com.cris.nvh.moviedb.databinding.ItemMovieBinding;
+import com.cris.nvh.moviedb.databinding.LayoutCategoryBinding;
+import com.cris.nvh.moviedb.util.MovieViewModel;
 
 /**
  * Created by nvh
@@ -17,53 +19,74 @@ import java.util.List;
  */
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
-    private List<MovieResponse> mMovieResponses;
+    private ObservableList<ObservableList<Movie>> mMovies;
+    private ObservableList<String> mCategories;
 
-    public CategoryAdapter(List<MovieResponse> movieResponses) {
-        mMovieResponses = movieResponses;
+    public CategoryAdapter() {
+        mMovies = new ObservableArrayList<>();
+        mCategories = new ObservableArrayList<>();
     }
 
     @Override
     public CategoryViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = LayoutInflater
-                .from(viewGroup.getContext())
-                .inflate(R.layout.layout_category, viewGroup, false);
-        return new CategoryViewHolder(view);
+        LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
+        LayoutCategoryBinding categoryBinding =
+                DataBindingUtil.inflate(inflater, R.layout.layout_category, viewGroup, false);
+        return new CategoryViewHolder(categoryBinding);
     }
 
     @Override
     public void onBindViewHolder(CategoryViewHolder genreViewHolder, int i) {
-        genreViewHolder.bindData(mMovieResponses.get(i));
+        genreViewHolder.bindData(mMovies.get(i), mCategories.get(i));
     }
 
     @Override
     public int getItemCount() {
-        return mMovieResponses == null ? 0 : mMovieResponses.size();
+        return mMovies == null ? 0 : mMovies.size();
+    }
+
+    public void update(ObservableList<ObservableList<Movie>> movies, ObservableList<String> categories) {
+        if (mMovies != null) mMovies.clear();
+        mCategories = categories;
+        mMovies.addAll(movies);
+        notifyDataSetChanged();
     }
 
     public static class CategoryViewHolder extends RecyclerView.ViewHolder {
+        private LayoutCategoryBinding mCategoryBinding;
 
-        public CategoryViewHolder(View itemView) {
-            super(itemView);
+        public CategoryViewHolder(LayoutCategoryBinding binding) {
+            super(binding.getRoot());
+            mCategoryBinding = binding;
+            mCategoryBinding.recyclerCategory.setAdapter(new MoviesAdapter());
         }
 
-        public void bindData(MovieResponse movieResponse) {
+        public void bindData(ObservableList<Movie> movies, String category) {
+            mCategoryBinding.textCategory.setText(category);
+            mCategoryBinding.setCategoryMovies(movies);
         }
 
         public static class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder> {
-            private List<Movie> mMovies;
+            private ObservableList<Movie> mMovies;
 
-            public MoviesAdapter(List<Movie> movies) {
-                mMovies = movies;
+            public MoviesAdapter() {
+                mMovies = new ObservableArrayList<>();
             }
 
             @Override
             public MovieViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-                return null;
+                ItemMovieBinding binding = DataBindingUtil.inflate(
+                        LayoutInflater.from(viewGroup.getContext()),
+                        R.layout.item_movie,
+                        viewGroup,
+                        false
+                );
+                return new MovieViewHolder(binding);
             }
 
             @Override
             public void onBindViewHolder(MovieViewHolder movieViewHolder, int i) {
+                movieViewHolder.bindData(mMovies.get(i));
             }
 
             @Override
@@ -71,10 +94,24 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                 return mMovies == null ? 0 : mMovies.size();
             }
 
-            public static class MovieViewHolder extends RecyclerView.ViewHolder {
+            public void update(ObservableList<Movie> movies) {
+                if (mMovies != null) mMovies.clear();
+                mMovies.addAll(movies);
+                notifyDataSetChanged();
+            }
 
-                public MovieViewHolder(View itemView) {
-                    super(itemView);
+            public static class MovieViewHolder extends RecyclerView.ViewHolder {
+                private ItemMovieBinding mMovieBinding;
+
+                public MovieViewHolder(ItemMovieBinding binding) {
+                    super(binding.getRoot());
+                    mMovieBinding = binding;
+                }
+
+                public void bindData(Movie movie) {
+                    mMovieBinding.setMovieVM(new MovieViewModel());
+                    mMovieBinding.getMovieVM().setMovie(movie);
+                    mMovieBinding.executePendingBindings();
                 }
             }
         }

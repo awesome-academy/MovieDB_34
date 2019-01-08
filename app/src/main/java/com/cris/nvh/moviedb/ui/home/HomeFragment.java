@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.cris.nvh.moviedb.R;
+import com.cris.nvh.moviedb.adapter.CategoryAdapter;
 import com.cris.nvh.moviedb.adapter.SlideAdapter;
 import com.cris.nvh.moviedb.data.repository.MovieRepository;
 import com.cris.nvh.moviedb.data.source.local.LocalDataSource;
@@ -27,7 +28,6 @@ import java.util.TimerTask;
 public class HomeFragment extends Fragment {
     private HomeViewModel mHomeViewModel;
     private FragmentHomeBinding mHomeBinding;
-    private ViewPager mViewPager;
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -43,6 +43,7 @@ public class HomeFragment extends Fragment {
         mHomeBinding.setHomeVM(mHomeViewModel);
         mHomeBinding.pagerImages.setAdapter(new SlideAdapter());
         mHomeBinding.indicator.setupWithViewPager(mHomeBinding.pagerImages, true);
+        mHomeBinding.recyclerCategories.setAdapter(new CategoryAdapter());
         return mHomeBinding.getRoot();
     }
 
