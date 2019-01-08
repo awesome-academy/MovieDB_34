@@ -20,9 +20,9 @@ import com.cris.nvh.moviedb.data.source.local.LocalDataSource;
 import com.cris.nvh.moviedb.data.source.remote.RemoteDataSource;
 import com.cris.nvh.moviedb.databinding.FragmentHomeBinding;
 import com.cris.nvh.moviedb.ui.moviedetails.MovieDetailsActivity;
-import com.cris.nvh.moviedb.ui.movies.MoviesActivity;
+import com.cris.nvh.moviedb.ui.search.SearchActivity;
 
-import static com.cris.nvh.moviedb.ui.search.SearchActivity.getIntent;
+import static com.cris.nvh.moviedb.ui.movies.MoviesActivity.getIntent;
 
 /**
  * Created by nvh
@@ -32,6 +32,7 @@ import static com.cris.nvh.moviedb.ui.search.SearchActivity.getIntent;
 public class HomeFragment extends Fragment implements HomeNavigator, SlideAdapter.TopTrendingClickListener,
         ViewPager.OnPageChangeListener, MoviesAdapter.MovieItemClickListener,
         CategoryAdapter.CategoryClickListener {
+    public static final String EXTRA_MOVIE = "com.cris.nvh.moviedb.ui.home.HomeFragment.EXTRA_MOVIE";
     private HomeViewModel mHomeViewModel;
     private FragmentHomeBinding mHomeBinding;
     private SlideAdapter mAdapter;
@@ -64,17 +65,17 @@ public class HomeFragment extends Fragment implements HomeNavigator, SlideAdapte
 
     @Override
     public void startMoviesActivity(String id, int getBy) {
-        startActivity(MoviesActivity.getIntent(getActivity()));
+        startActivity(getIntent(getActivity()));
     }
 
     @Override
     public void startMovieDetailActivity(Movie movie) {
-        startActivity(MovieDetailsActivity.getIntent(getActivity()));
+        startActivity(MovieDetailsActivity.getIntent(getActivity(), movie));
     }
 
     @Override
     public void startSearchActivity() {
-        startActivity(getIntent(getActivity()));
+        startActivity(SearchActivity.getIntent(getActivity()));
     }
 
     @Override

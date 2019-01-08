@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.cris.nvh.moviedb.adapter.ViewPagerAdapter;
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mViewpager = findViewById(R.id.view_pager);
+        mViewpager = findViewById(R.id.viewpager);
         mBottomNavigation = findViewById(R.id.navigation);
         mViewpager.setOnPageChangeListener(this);
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
