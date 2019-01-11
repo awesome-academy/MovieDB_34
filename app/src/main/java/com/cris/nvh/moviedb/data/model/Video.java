@@ -1,4 +1,4 @@
-package com.cris.nvh.moviedb.data.model.data;
+package com.cris.nvh.moviedb.data.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -10,24 +10,28 @@ import com.google.gson.annotations.SerializedName;
  * Contact: toiyeuthethao1997@gmail.com
  */
 
-public class Genre implements Parcelable {
+public class Video implements Parcelable {
 	@SerializedName("id")
 	private int mId;
+	@SerializedName("key")
+	private String mKey;
 	@SerializedName("name")
 	private String mName;
 
-	public Genre(int id){
+	public Video(int id) {
 		mId = id;
 	}
 
-	protected Genre(Parcel in) {
+	protected Video(Parcel in) {
 		mId = in.readInt();
+		mKey = in.readString();
 		mName = in.readString();
 	}
 
 	@Override
 	public void writeToParcel(Parcel parcel, int i) {
 		parcel.writeInt(mId);
+		parcel.writeString(mKey);
 		parcel.writeString(mName);
 	}
 
@@ -36,20 +40,24 @@ public class Genre implements Parcelable {
 		return 0;
 	}
 
-	public static final Creator<Genre> CREATOR = new Creator<Genre>() {
+	public static final Creator<Video> CREATOR = new Creator<Video>() {
 		@Override
-		public Genre createFromParcel(Parcel in) {
-			return new Genre(in);
+		public Video createFromParcel(Parcel in) {
+			return new Video(in);
 		}
 
 		@Override
-		public Genre[] newArray(int size) {
-			return new Genre[size];
+		public Video[] newArray(int size) {
+			return new Video[size];
 		}
 	};
 
 	public int getId() {
 		return mId;
+	}
+
+	public String getKey() {
+		return mKey;
 	}
 
 	public String getName() {

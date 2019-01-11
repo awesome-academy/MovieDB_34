@@ -6,6 +6,14 @@
         <item name="colorPrimary">@color/color_primary</item>
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
         <item name="colorAccent">@color/color_accent</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="DarkTheme" parent="@style/Theme.AppCompat">
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorPrimaryDark">@color/color_primary_dark</item>
+        <item name="colorAccent">@color/color_accent</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
 </resources>
