@@ -1,8 +1,14 @@
 package com.cris.nvh.moviedb.service;
 
+import com.cris.nvh.moviedb.BuildConfig;
+
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.HttpUrl;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -15,35 +21,46 @@ import static com.cris.nvh.moviedb.util.Constant.BASE_URL;
  */
 
 public class MovieDBClient {
-	private static final int WRITE_TIMEOUT = 5;
-	private static final int READ_TIMEOUT = 5;
-	private static final int CONNECT_TIMEOUT = 8;
-	private static MovieDBClient sClient;
-	private Request mRequest;
+    private static final String API_KEY = "api_key";
+    private static final int WRITE_TIMEOUT = 5000;
+    private static final int READ_TIMEOUT = 5000;
+    private static final int CONNECT_TIMEOUT = 8000;
+    private static MovieDBClient sClient;
 
-	private MovieDBClient() {
-		mRequest = initRetrofitRequest();
-	}
+    public static MovieDBClient getInstance() {
+        if (sClient == null) {
+            sClient = new MovieDBClient();
+        }
+        return sClient;
+    }
 
-	public static MovieDBClient getInstance() {
-		if (sClient == null) {
-			sClient = new MovieDBClient();
-		}
-		return sClient;
-	}
-
-	public Request initRetrofitRequest() {
-		OkHttpClient httpClient = new OkHttpClient.Builder()
-				.writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
-				.readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
-				.connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
-				.retryOnConnectionFailure(true)
-				.build();
-		Retrofit.Builder builder = new Retrofit.Builder()
-				.baseUrl(BASE_URL)
-				.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-				.addConverterFactory(GsonConverterFactory.create());
-		Retrofit retrofit = builder.client(httpClient).build();
-		return retrofit.create(Request.class);
-	}
+    public Request initRetrofitRequest() {
+        OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder()
+                .readTimeout(READ_TIMEOUT, TimeUnit.MILLISECONDS)
+                .writeTimeout(WRITE_TIMEOUT, TimeUnit.MILLISECONDS)
+                .connectTimeout(CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
+                .retryOnConnectionFailure(true);
+        httpClientBuilder.addInterceptor(new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                okhttp3.Request request = chain.request();
+                HttpUrl httpUrl = request
+                        .url()
+                        .newBuilder()
+                        .addQueryParameter(API_KEY, BuildConfig.API_KEY)
+                        .build();
+                okhttp3.Request.Builder requestBuilder = request
+                        .newBuilder()
+                        .url(httpUrl);
+                return chain.proceed(requestBuilder.build());
+            }
+        });
+        return new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .client(httpClientBuilder.build())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Request.class);
+    }
 }

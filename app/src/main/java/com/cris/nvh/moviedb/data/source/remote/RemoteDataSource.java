@@ -4,6 +4,9 @@ import com.cris.nvh.moviedb.data.model.GenreResponse;
 import com.cris.nvh.moviedb.data.model.Movie;
 import com.cris.nvh.moviedb.data.model.MovieResponse;
 import com.cris.nvh.moviedb.data.source.MovieDataSource;
+import com.cris.nvh.moviedb.service.MovieDBClient;
+import com.cris.nvh.moviedb.service.Request;
+
 import io.reactivex.Observable;
 
 /**
@@ -13,16 +16,21 @@ import io.reactivex.Observable;
 
 public class RemoteDataSource implements MovieDataSource.Remote {
     private static RemoteDataSource sRemote;
+    private Request mRequest;
+
+    private RemoteDataSource(MovieDBClient client) {
+        mRequest = client.initRetrofitRequest();
+    }
 
     public static RemoteDataSource getInstance() {
         if (sRemote == null)
-            sRemote = new RemoteDataSource();
+            sRemote = new RemoteDataSource(MovieDBClient.getInstance());
         return sRemote;
     }
 
     @Override
     public Observable<MovieResponse> getMoviesByCategory(String category, int page) {
-        return null;
+        return mRequest.getMoviesCategory(category, page);
     }
 
     @Override
@@ -42,7 +50,7 @@ public class RemoteDataSource implements MovieDataSource.Remote {
 
     @Override
     public Observable<MovieResponse> getMoviesTrendingByDay() {
-        return null;
+        return mRequest.getMoviesTrendingByDay();
     }
 
     @Override
@@ -52,7 +60,7 @@ public class RemoteDataSource implements MovieDataSource.Remote {
 
     @Override
     public Observable<GenreResponse> getGenres() {
-        return null;
+        return mRequest.getGenres();
     }
 
     @Override
