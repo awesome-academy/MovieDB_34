@@ -14,4 +14,9 @@
         <item name="android:textColor">@color/color_white</item>
     </style>
 
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">#FFFFFF</item>
+        <item name="colorControlActivated">#FAE300</item>
+    </style>
+
 </resources>

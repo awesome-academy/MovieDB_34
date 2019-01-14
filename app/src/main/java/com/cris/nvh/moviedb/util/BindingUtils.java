@@ -12,6 +12,7 @@ import android.widget.Spinner;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cris.nvh.moviedb.R;
+import com.cris.nvh.moviedb.adapter.CategoryAdapter;
 import com.cris.nvh.moviedb.adapter.SlideAdapter;
 import com.cris.nvh.moviedb.data.model.Cast;
 import com.cris.nvh.moviedb.data.model.Company;
@@ -28,7 +29,6 @@ import static com.cris.nvh.moviedb.util.Constant.IMAGE_QUALITY_MAX;
 
 public class BindingUtils {
     private static final int FIRST_INDEX = 0;
-    private static final int LAST_INDEX = 6;
     private static final int DELAY = 5000;
     private static final int PLUS = 1;
     private static final int DURATION = 5000;
@@ -37,7 +37,7 @@ public class BindingUtils {
     public static void bindPagerAdapter(ViewPager pager, List<Movie> movies) {
         SlideAdapter slideAdapter = (SlideAdapter) pager.getAdapter();
         if (slideAdapter != null && movies.size() > 0) {
-            slideAdapter.update(movies.subList(FIRST_INDEX, LAST_INDEX));
+            slideAdapter.update(movies);
         }
     }
 
@@ -57,8 +57,24 @@ public class BindingUtils {
     public static void bindRecyclerMovies(RecyclerView recycler, ObservableList<Movie> movies) {
     }
 
-    @BindingAdapter("bindCategories")
-    public static void bindRecyclerCategories(RecyclerView recycler, List<ObservableList<Movie>> movies) {
+    @BindingAdapter({"bindCategories", "bindCategoryString"})
+    public static void bindRecyclerCategories(RecyclerView recycler,
+                                              ObservableList<ObservableList<Movie>> movies,
+                                              ObservableList<String> categories) {
+        CategoryAdapter adapter = (CategoryAdapter) recycler.getAdapter();
+        if (adapter != null) {
+            adapter.update(movies, categories);
+        }
+    }
+
+    @BindingAdapter("bindCategoryMovies")
+    public static void bindRecyclerCategoryMovies(RecyclerView recycler,
+                                                  ObservableList<Movie> movies) {
+        CategoryAdapter.CategoryViewHolder.MoviesAdapter adapter =
+                (CategoryAdapter.CategoryViewHolder.MoviesAdapter) recycler.getAdapter();
+        if (adapter != null) {
+            adapter.update(movies);
+        }
     }
 
     @BindingAdapter("bindGenres")
