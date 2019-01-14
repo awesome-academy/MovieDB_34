@@ -10,9 +10,11 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.cris.nvh.moviedb.R;
 import com.cris.nvh.moviedb.adapter.CategoryAdapter;
+import com.cris.nvh.moviedb.adapter.CategoryAdapter.CategoryViewHolder.MoviesAdapter;
 import com.cris.nvh.moviedb.adapter.SlideAdapter;
 import com.cris.nvh.moviedb.data.model.Cast;
 import com.cris.nvh.moviedb.data.model.Company;
@@ -55,6 +57,10 @@ public class BindingUtils {
 
     @BindingAdapter("bindMovies")
     public static void bindRecyclerMovies(RecyclerView recycler, ObservableList<Movie> movies) {
+        MoviesAdapter adapter = (MoviesAdapter) recycler.getAdapter();
+        if (adapter != null) {
+            adapter.update(movies);
+        }
     }
 
     @BindingAdapter({"bindCategories", "bindCategoryString"})
@@ -99,7 +105,8 @@ public class BindingUtils {
     public static void bindImage(ImageView imageView, String url) {
         String source = StringUtils.append(BASE_IMAGE_URL, IMAGE_QUALITY_MAX, url);
         RequestOptions requestOptions = new RequestOptions();
-        requestOptions.placeholder(R.drawable.default_poster);
+        requestOptions.placeholder(R.drawable.default_poster)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
         Glide.with(imageView.getContext())
                 .load(source)
                 .apply(requestOptions)

@@ -6,4 +6,5 @@
     <color name="color_scrim">#393838</color>
     <color name="color_white">#FFFF</color>
     <color name="yellow">#D4E434</color>
+    <color name="color_black">#000</color>
 </resources>

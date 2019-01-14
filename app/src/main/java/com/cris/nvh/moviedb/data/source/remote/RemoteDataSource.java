@@ -38,7 +38,7 @@ public class RemoteDataSource implements MovieDataSource.Remote {
 
     @Override
     public Observable<MovieResponse> getMoviesByGenre(int genreId, int page) {
-        return null;
+        return mRequest.getMoviesByGenre(String.valueOf(genreId), page);
     }
 
     @Override

@@ -4,21 +4,18 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.cris.nvh.moviedb.R;
 import com.cris.nvh.moviedb.adapter.CategoryAdapter;
+import com.cris.nvh.moviedb.adapter.CategoryAdapter.CategoryViewHolder.MoviesAdapter;
 import com.cris.nvh.moviedb.adapter.SlideAdapter;
 import com.cris.nvh.moviedb.data.repository.MovieRepository;
 import com.cris.nvh.moviedb.data.source.local.LocalDataSource;
 import com.cris.nvh.moviedb.data.source.remote.RemoteDataSource;
 import com.cris.nvh.moviedb.databinding.FragmentHomeBinding;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by nvh
@@ -44,6 +41,7 @@ public class HomeFragment extends Fragment {
         mHomeBinding.pagerImages.setAdapter(new SlideAdapter());
         mHomeBinding.indicator.setupWithViewPager(mHomeBinding.pagerImages, true);
         mHomeBinding.recyclerCategories.setAdapter(new CategoryAdapter());
+        mHomeBinding.recyclerGenres.setAdapter(new MoviesAdapter());
         return mHomeBinding.getRoot();
     }
 

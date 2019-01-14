@@ -60,7 +60,7 @@ public class MovieRepository implements MovieDataSource.Local, MovieDataSource.R
 
     @Override
     public Observable<MovieResponse> getMoviesByGenre(int genreId, int page) {
-        return null;
+        return mRemote.getMoviesByGenre(genreId, page);
     }
 
     @Override
