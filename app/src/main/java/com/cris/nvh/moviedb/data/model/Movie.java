@@ -40,6 +40,9 @@ public class Movie implements Parcelable {
 	@SerializedName("vote_count")
 	private int mVoteCount;
 
+	public Movie(){
+    }
+
 	public Movie(int id) {
 		mId = id;
 	}

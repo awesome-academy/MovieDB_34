@@ -4,6 +4,7 @@ import android.databinding.BaseObservable;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableList;
+import android.support.v4.view.ViewPager;
 
 import com.cris.nvh.moviedb.data.annotation.GenresKey;
 import com.cris.nvh.moviedb.data.model.Genre;
@@ -12,6 +13,12 @@ import com.cris.nvh.moviedb.data.model.Movie;
 import com.cris.nvh.moviedb.data.model.MovieResponse;
 import com.cris.nvh.moviedb.data.repository.MovieRepository;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -29,6 +36,7 @@ public class HomeViewModel extends BaseObservable {
     public final ObservableList<Movie> topRateMoviesObservable;
     public final ObservableList<Movie> topTrendingMoviesObservable;
     public final ObservableList<Genre> genresObservable;
+    public final ObservableList<Movie> genreMoviesObservable;
     public final ObservableBoolean isLoadingSuccess;
     private static final int FIRST_PAGE = 1;
     private MovieRepository mMovieRepository;
@@ -41,10 +49,20 @@ public class HomeViewModel extends BaseObservable {
         upComingMoviesObservable = new ObservableArrayList<>();
         topRateMoviesObservable = new ObservableArrayList<>();
         topTrendingMoviesObservable = new ObservableArrayList<>();
+        genreMoviesObservable = new ObservableArrayList<>();
         genresObservable = new ObservableArrayList<>();
         isLoadingSuccess = new ObservableBoolean();
         mCompositeDisposable = new CompositeDisposable();
         initData();
+    }
+
+    public List<ObservableList<Movie>> getCategoryMovies() {
+        List<ObservableList<Movie>> listCategories = new ArrayList<>();
+        listCategories.add(popularMoviesObservable);
+        listCategories.add(nowPlayingMoviesObservable);
+        listCategories.add(upComingMoviesObservable);
+        listCategories.add(topRateMoviesObservable);
+        return listCategories;
     }
 
     public void dispose() {
@@ -63,6 +81,7 @@ public class HomeViewModel extends BaseObservable {
     private void loadTopRateMovies() {
         Disposable disposable = mMovieRepository.getMoviesByCategory(GenresKey.TOP_RATED, FIRST_PAGE)
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<MovieResponse>() {
                     @Override
                     public void accept(MovieResponse movieResponse) throws Exception {
@@ -71,6 +90,7 @@ public class HomeViewModel extends BaseObservable {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
+                        handleError(throwable.getMessage());
                     }
                 });
         mCompositeDisposable.add(disposable);
@@ -79,6 +99,7 @@ public class HomeViewModel extends BaseObservable {
     private void loadUpComingMovies() {
         Disposable disposable = mMovieRepository.getMoviesByCategory(GenresKey.UPCOMING, FIRST_PAGE)
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<MovieResponse>() {
                     @Override
                     public void accept(MovieResponse movieResponse) throws Exception {
@@ -87,6 +108,7 @@ public class HomeViewModel extends BaseObservable {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
+                        handleError(throwable.getMessage());
                     }
                 });
         mCompositeDisposable.add(disposable);
@@ -95,6 +117,7 @@ public class HomeViewModel extends BaseObservable {
     private void loadNowPlayingMovies() {
         Disposable disposable = mMovieRepository.getMoviesByCategory(GenresKey.NOW_PLAYING, FIRST_PAGE)
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<MovieResponse>() {
                     @Override
                     public void accept(MovieResponse movieResponse) throws Exception {
@@ -103,7 +126,9 @@ public class HomeViewModel extends BaseObservable {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
+                        handleError(throwable.getMessage());
                     }
+
                 });
         mCompositeDisposable.add(disposable);
     }
@@ -111,6 +136,7 @@ public class HomeViewModel extends BaseObservable {
     private void loadPopularMovies() {
         Disposable disposable = mMovieRepository.getMoviesByCategory(GenresKey.POPULAR, FIRST_PAGE)
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<MovieResponse>() {
                     @Override
                     public void accept(MovieResponse movieResponse) throws Exception {
@@ -119,6 +145,7 @@ public class HomeViewModel extends BaseObservable {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
+                        handleError(throwable.getMessage());
                     }
                 });
         mCompositeDisposable.add(disposable);
@@ -127,6 +154,7 @@ public class HomeViewModel extends BaseObservable {
     private void loadTopTrendingMovies() {
         Disposable disposable = mMovieRepository.getMoviesTrendingByDay()
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<MovieResponse>() {
                     @Override
                     public void accept(MovieResponse movieResponse) throws Exception {
@@ -135,6 +163,7 @@ public class HomeViewModel extends BaseObservable {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
+                        handleError(throwable.getMessage());
                     }
                 });
         mCompositeDisposable.add(disposable);
@@ -143,16 +172,23 @@ public class HomeViewModel extends BaseObservable {
     private void loadGenre() {
         Disposable disposable = mMovieRepository.getGenres()
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<GenreResponse>() {
                     @Override
-                    public void accept(GenreResponse genre) throws Exception {
-                        genresObservable.addAll(genre.getGenres());
+                    public void accept(GenreResponse genreResponse) throws Exception {
+                        genresObservable.addAll(genreResponse.getGenres());
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
+                        handleError(throwable.getMessage());
                     }
                 });
         mCompositeDisposable.add(disposable);
     }
+
+    private void handleError(String message) {
+    }
+
+
 }

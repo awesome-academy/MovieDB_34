@@ -1,11 +1,19 @@
 package com.cris.nvh.moviedb.adapter;
 
+import android.databinding.DataBindingUtil;
+import android.databinding.ObservableArrayList;
+import android.databinding.ObservableList;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.cris.nvh.moviedb.R;
+import com.cris.nvh.moviedb.data.model.Movie;
+import com.cris.nvh.moviedb.databinding.LayoutSlideMoviesBinding;
+import com.cris.nvh.moviedb.util.MovieViewModel;
+
+import java.util.List;
 
 /**
  * Created by nvh
@@ -13,11 +21,24 @@ import com.cris.nvh.moviedb.R;
  */
 
 public class SlideAdapter extends PagerAdapter {
+    private ObservableList<Movie> mMovies;
+    private int mCurrentPosition;
+
+    public SlideAdapter() {
+        mMovies = new ObservableArrayList<>();
+    }
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        return LayoutInflater.from(container.getContext())
-                .inflate(R.layout.layout_slide_movies, container, false);
+        LayoutSlideMoviesBinding binding = DataBindingUtil.inflate(
+                LayoutInflater.from(container.getContext()),
+                R.layout.layout_slide_movies, container, true);
+        if (binding.getMovieVM() == null) {
+            binding.setMovieVM(new MovieViewModel());
+        }
+        binding.getMovieVM().setMovie(mMovies.get(position));
+        binding.executePendingBindings();
+        return binding.getRoot();
 
     }
 
@@ -29,11 +50,21 @@ public class SlideAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return 0;
+        return mMovies.size();
     }
 
     @Override
     public boolean isViewFromObject(View view, Object object) {
         return view == object;
+    }
+
+    public void update(List<Movie> movies) {
+        mMovies.clear();
+        mMovies.addAll(movies);
+        notifyDataSetChanged();
+    }
+
+    private void setCurrentPosition(int position) {
+        mCurrentPosition = position;
     }
 }

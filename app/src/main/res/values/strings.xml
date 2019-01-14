@@ -5,4 +5,5 @@
     <string name="title_home">Home</string>
     <string name="text_genres">Genres</string>
     <string name="text_view_all">View all</string>
+    <string name="text_msg">msg</string>
 </resources>
