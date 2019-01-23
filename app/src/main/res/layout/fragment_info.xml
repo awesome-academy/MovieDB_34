@@ -31,11 +31,11 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dp_10"
             android:layout_marginStart="@dimen/dp_10"
-            android:maxWidth="@dimen/dp_180"
             android:singleLine="false"
             android:text="@{movieVM.movieObservable.title}"
             android:textColor="@color/color_accent"
             android:textSize="@dimen/sp_18"
+            app:layout_constraintEnd_toStartOf="@drawable/favorite"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView

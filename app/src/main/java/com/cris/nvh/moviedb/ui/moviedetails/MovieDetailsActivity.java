@@ -20,6 +20,7 @@ import com.cris.nvh.moviedb.databinding.ActivityMovieDetailBinding;
 import com.cris.nvh.moviedb.ui.cast.CastFragment;
 import com.cris.nvh.moviedb.ui.info.InfoFragment;
 import com.cris.nvh.moviedb.ui.producer.ProducerFragment;
+import com.cris.nvh.moviedb.ui.search.SearchActivity;
 import com.cris.nvh.moviedb.ui.trailer.TrailerFragment;
 
 import static com.cris.nvh.moviedb.ui.home.HomeFragment.EXTRA_MOVIE;
@@ -29,7 +30,8 @@ import static com.cris.nvh.moviedb.ui.home.HomeFragment.EXTRA_MOVIE;
  * Contact: toiyeuthethao1997@gmail.com
  */
 
-public class MovieDetailsActivity extends AppCompatActivity {
+public class MovieDetailsActivity extends AppCompatActivity implements OnChangeVideoListener,
+        MovieDetailNavigator {
     private static final int DURATION = 1000;
     private static final int FROMALPHA = 0;
     private static final int TOALPHA = 1;
@@ -46,12 +48,30 @@ public class MovieDetailsActivity extends AppCompatActivity {
         initView();
     }
 
+    @Override
+    public void setVideoKey(String videoKey) {
+        mYoutubePlayerFragment.setVideoKey(videoKey);
+    }
+
+    @Override
+    public void startSearchActivity() {
+        startActivity(SearchActivity.getIntent(this));
+    }
+
+    @Override
+    public void onBackPress() {
+        onBackPressed();
+    }
+
+
     private void initViewModel() {
         Movie movie = getIntent().getParcelableExtra(EXTRA_MOVIE);
         MovieRepository movieRepository = MovieRepository.getInstance(
                 LocalDataSource.getInstance(),
                 RemoteDataSource.getInstance());
         mViewModel = new MovieDetailsViewModel(movie.getId(), movieRepository);
+        mViewModel.setOnChangeVideoListener(this);
+        mViewModel.setNavigator(this);
     }
 
     public static Intent getIntent(Context context, Movie movie) {
