@@ -7,7 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.cris.nvh.moviedb.R;
+import com.cris.nvh.moviedb.databinding.FragmentInfoBinding;
+import com.cris.nvh.moviedb.ui.moviedetails.MovieDetailsViewModel;
 
 /**
  * Created by nvh
@@ -15,13 +16,22 @@ import com.cris.nvh.moviedb.R;
  */
 
 public class InfoFragment extends Fragment {
+    private FragmentInfoBinding mBinding;
+    private MovieDetailsViewModel mViewModel;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_info, container, false);
+        mBinding = FragmentInfoBinding.inflate(inflater, container, false);
+        mBinding.setMovieVM(mViewModel);
+        return mBinding.getRoot();
     }
 
-    public static InfoFragment newInstance(){
+    public void setViewModel(MovieDetailsViewModel viewModel) {
+        mViewModel = viewModel;
+    }
+
+    public static InfoFragment newInstance() {
         return new InfoFragment();
     }
 }

@@ -151,6 +151,6 @@ public class Movie implements Parcelable {
     }
 
     public float calculateVoteRating() {
-        return mVoteAverage / 2;
+        return (mVoteAverage / 2);
     }
 }

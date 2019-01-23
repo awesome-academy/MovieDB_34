@@ -12,25 +12,25 @@ import com.google.gson.annotations.SerializedName;
 
 public class Video implements Parcelable {
 	@SerializedName("id")
-	private int mId;
+	private String mId;
 	@SerializedName("key")
 	private String mKey;
 	@SerializedName("name")
 	private String mName;
 
-	public Video(int id) {
+	public Video(String id) {
 		mId = id;
 	}
 
 	protected Video(Parcel in) {
-		mId = in.readInt();
+		mId = in.readString();
 		mKey = in.readString();
 		mName = in.readString();
 	}
 
 	@Override
 	public void writeToParcel(Parcel parcel, int i) {
-		parcel.writeInt(mId);
+		parcel.writeString(mId);
 		parcel.writeString(mKey);
 		parcel.writeString(mName);
 	}
@@ -52,7 +52,7 @@ public class Video implements Parcelable {
 		}
 	};
 
-	public int getId() {
+	public String getId() {
 		return mId;
 	}
 

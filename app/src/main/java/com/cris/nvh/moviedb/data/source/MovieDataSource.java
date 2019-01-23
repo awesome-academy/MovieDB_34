@@ -33,7 +33,7 @@ public interface MovieDataSource {
 
         Observable<MovieResponse> getMoviesTrendingByDay();
 
-        Observable<Movie> getMovieDetail(int movieId);
+        Observable<Movie> getMovieDetail(int movieId, String value);
 
         Observable<GenreResponse> getGenres();
 
