@@ -7,9 +7,6 @@ import com.cris.nvh.moviedb.data.source.MovieDataSource;
 import com.cris.nvh.moviedb.service.MovieDBClient;
 import com.cris.nvh.moviedb.service.Request;
 
-import com.cris.nvh.moviedb.service.MovieDBClient;
-import com.cris.nvh.moviedb.service.Request;
-
 import io.reactivex.Observable;
 
 /**

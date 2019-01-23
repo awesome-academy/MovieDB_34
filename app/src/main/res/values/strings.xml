@@ -6,4 +6,8 @@
     <string name="text_genres">Genres</string>
     <string name="text_view_all">View all</string>
     <string name="text_msg">msg</string>
+    <string name="title_information">Infomation</string>
+    <string name="title_actor">Actor</string>
+    <string name="title_trailer">Trailer</string>
+    <string name="title_producer">Producer</string>
 </resources>
