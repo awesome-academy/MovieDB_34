@@ -3,8 +3,12 @@ package com.cris.nvh.moviedb.ui.home;
 import android.databinding.BaseObservable;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableBoolean;
+import android.databinding.ObservableField;
 import android.databinding.ObservableList;
+import android.view.View;
+import android.widget.AdapterView;
 
+import com.cris.nvh.moviedb.data.annotation.CategoryRequest;
 import com.cris.nvh.moviedb.data.annotation.GenresKey;
 import com.cris.nvh.moviedb.data.model.Genre;
 import com.cris.nvh.moviedb.data.model.GenreResponse;
@@ -33,6 +37,7 @@ public class HomeViewModel extends BaseObservable {
     public final ObservableList<Movie> genreMoviesObservable;
     public final ObservableList<ObservableList<Movie>> listCategoryMovies;
     public final ObservableList<String> categoryStringObservable;
+    public final ObservableField<Genre> genreField;
     public final ObservableBoolean isLoadingSuccess;
     private static final int DEFAULT_PAGE = 1;
     private static final int FIRST_PAGE = 1;
@@ -44,9 +49,12 @@ public class HomeViewModel extends BaseObservable {
     private static final String UPCOMING = "UPCOMING";
     private MovieRepository mMovieRepository;
     private CompositeDisposable mCompositeDisposable;
+    private HomeNavigator mNavigator;
 
-    public HomeViewModel(MovieRepository movieRepository) {
+    public HomeViewModel(HomeNavigator navigator, MovieRepository movieRepository) {
+        mNavigator = navigator;
         mMovieRepository = movieRepository;
+        genreField = new ObservableField<>();
         listCategoryMovies = new ObservableArrayList<>();
         categoryStringObservable = new ObservableArrayList<>();
         popularMoviesObservable = new ObservableArrayList<>();
@@ -63,6 +71,23 @@ public class HomeViewModel extends BaseObservable {
 
     public void dispose() {
         mCompositeDisposable.dispose();
+    }
+
+    public void onItemSpinnerSelected(AdapterView<?> parent, View view, int position, long id) {
+        genreField.set(genresObservable.get(position));
+        loadGenreMovies();
+    }
+
+    public void onGenreClick(Genre genre) {
+        mNavigator.startMoviesActivity(String.valueOf(genre.getId()), CategoryRequest.GENRE);
+    }
+
+    public void onSearchClick() {
+        mNavigator.startSearchActivity();
+    }
+
+    public void onFloatingButtonClick() {
+        mNavigator.startMoviesActivity(null, CategoryRequest.TRENDING);
     }
 
     private void initData() {
@@ -181,7 +206,7 @@ public class HomeViewModel extends BaseObservable {
                     @Override
                     public void accept(GenreResponse genreResponse) throws Exception {
                         genresObservable.addAll(genreResponse.getGenres());
-                        loadGenreMovies(FIRST_INDEX);
+                        loadGenreMovies();
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -192,14 +217,15 @@ public class HomeViewModel extends BaseObservable {
         mCompositeDisposable.add(disposable);
     }
 
-    private void loadGenreMovies(int position) {
+    private void loadGenreMovies() {
         Disposable disposable = mMovieRepository
-                .getMoviesByGenre(genresObservable.get(position).getId(), DEFAULT_PAGE)
+                .getMoviesByGenre(genreField.get().getId(), DEFAULT_PAGE)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<MovieResponse>() {
                     @Override
                     public void accept(MovieResponse movieResponse) throws Exception {
+                        genreMoviesObservable.clear();
                         genreMoviesObservable.addAll(movieResponse.getMovies().subList(FIRST_INDEX, LAST_INDEX));
                     }
                 }, new Consumer<Throwable>() {
