@@ -22,7 +22,9 @@ public class MovieDetailsViewModel extends BaseObservable {
     public final ObservableField<Movie> movieObservable;
     public final ObservableBoolean isFavoriteMovieObservable;
     public final ObservableBoolean isLoadingSuccess;
+    private OnChangeVideoListener mListener;
     private MovieRepository mMovieRepository;
+    private MovieDetailNavigator mNavigator;
     private static final String APPEND_TO_MOVIE_DETAIL = "videos,credits";
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
@@ -34,6 +36,22 @@ public class MovieDetailsViewModel extends BaseObservable {
         loadMovie(movieId);
     }
 
+    public void setNavigator(MovieDetailNavigator navigator) {
+        mNavigator = navigator;
+    }
+
+    public void startSearchActivity() {
+        mNavigator.startSearchActivity();
+    }
+
+    public void onBackPress(){
+        mNavigator.onBackPress();
+    }
+
+    public void setOnChangeVideoListener(OnChangeVideoListener listener) {
+        mListener = listener;
+    }
+
     private void loadMovie(final int movieId) {
         Disposable disposable = mMovieRepository.getMovieDetail(movieId, APPEND_TO_MOVIE_DETAIL)
                 .subscribeOn(Schedulers.io())
@@ -42,6 +60,10 @@ public class MovieDetailsViewModel extends BaseObservable {
                     @Override
                     public void accept(Movie movie) {
                         movieObservable.set(movie);
+                        if (movie.getVideoResponse().getVideos().size() > 0) {
+                            mListener.setVideoKey(
+                                    movie.getVideoResponse().getVideos().get(0).getKey());
+                        }
                     }
                 }, new Consumer<Throwable>() {
                     @Override

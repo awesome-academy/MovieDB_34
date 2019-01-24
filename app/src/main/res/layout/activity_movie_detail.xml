@@ -28,6 +28,7 @@
                 android:layout_gravity="end"
                 android:layout_marginRight="@dimen/dp_15"
                 android:layout_marginTop="@dimen/dp_3"
+                android:onClick="@{() -> movieVM.startSearchActivity()}"
                 android:scaleType="fitXY"
                 android:src="@drawable/ic_search" />
 
@@ -38,6 +39,7 @@
                 android:layout_gravity="start"
                 android:layout_marginLeft="@dimen/dp_15"
                 android:layout_marginTop="@dimen/dp_3"
+                android:onClick="@{() -> movieVM.onBackPress()}"
                 android:scaleType="fitXY"
                 android:src="@drawable/ic_back" />
 
