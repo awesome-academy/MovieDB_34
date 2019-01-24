@@ -3,6 +3,7 @@ package com.cris.nvh.moviedb.ui.moviedetails;
 import android.databinding.BaseObservable;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 
 import com.cris.nvh.moviedb.data.model.Movie;
 import com.cris.nvh.moviedb.data.repository.MovieRepository;
@@ -22,6 +23,8 @@ public class MovieDetailsViewModel extends BaseObservable {
     public final ObservableField<Movie> movieObservable;
     public final ObservableBoolean isFavoriteMovieObservable;
     public final ObservableBoolean isLoadingSuccess;
+    private final ObservableInt currentVideoIndex;
+    private final ObservableBoolean isPlaying;
     private OnChangeVideoListener mListener;
     private MovieRepository mMovieRepository;
     private MovieDetailNavigator mNavigator;
@@ -32,6 +35,8 @@ public class MovieDetailsViewModel extends BaseObservable {
         movieObservable = new ObservableField<>();
         isFavoriteMovieObservable = new ObservableBoolean();
         isLoadingSuccess = new ObservableBoolean();
+        isPlaying = new ObservableBoolean();
+        currentVideoIndex = new ObservableInt();
         mMovieRepository = movieRepository;
         loadMovie(movieId);
     }
@@ -63,6 +68,8 @@ public class MovieDetailsViewModel extends BaseObservable {
                         if (movie.getVideoResponse().getVideos().size() > 0) {
                             mListener.setVideoKey(
                                     movie.getVideoResponse().getVideos().get(0).getKey());
+                            currentVideoIndex.set(0);
+                            isPlaying.set(mListener.isPlaying());
                         }
                     }
                 }, new Consumer<Throwable>() {

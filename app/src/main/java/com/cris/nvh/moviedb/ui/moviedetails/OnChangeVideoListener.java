@@ -7,4 +7,6 @@ package com.cris.nvh.moviedb.ui.moviedetails;
 
 public interface OnChangeVideoListener {
     void setVideoKey(String videoKey);
+    void playVideo();
+    boolean isPlaying();
 }

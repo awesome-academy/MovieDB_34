@@ -54,6 +54,10 @@ public class VideoFragment extends YouTubePlayerSupportFragment implements YouTu
         }
     }
 
+    public boolean isPlaying() {
+        return mYouTubePlayer.isPlaying();
+    }
+
     public String getVideoId() {
         return mVideoKey;
     }
