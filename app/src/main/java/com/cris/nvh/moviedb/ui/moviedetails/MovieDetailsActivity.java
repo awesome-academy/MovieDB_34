@@ -113,6 +113,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements OnChangeV
         TrailerFragment trailerFragment = TrailerFragment.newInstance();
         trailerFragment.setViewModel(mViewModel);
         CastFragment castFragment = CastFragment.newInstance();
+        castFragment.setViewModel(mViewModel);
         ProducerFragment produceFragment = ProducerFragment.newInstance();
         produceFragment.setViewModel(mViewModel);
         MoviePagerAdapter pagerAdapter = new MoviePagerAdapter(getSupportFragmentManager());
