@@ -17,17 +17,20 @@
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="@dimen/dp_40"
-            app:layout_collapseMode="none">
+            app:layout_collapseMode="none"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/image_search"
                 android:layout_width="@dimen/dp_32"
                 android:layout_height="@dimen/dp_32"
                 android:layout_gravity="end"
-                android:layout_marginRight="@dimen/dp_15"
                 android:layout_marginTop="@dimen/dp_3"
+                android:layout_marginRight="@dimen/dp_15"
                 android:onClick="@{() -> movieVM.startSearchActivity()}"
                 android:scaleType="fitXY"
                 android:src="@drawable/ic_search" />

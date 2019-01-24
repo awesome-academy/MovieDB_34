@@ -4,6 +4,7 @@ import android.databinding.BaseObservable;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
+import android.util.Log;
 
 import com.cris.nvh.moviedb.data.model.Movie;
 import com.cris.nvh.moviedb.data.repository.MovieRepository;
@@ -55,6 +56,10 @@ public class MovieDetailsViewModel extends BaseObservable {
 
     public void setOnChangeVideoListener(OnChangeVideoListener listener) {
         mListener = listener;
+    }
+
+    public void clear() {
+        mCompositeDisposable.dispose();
     }
 
     private void loadMovie(final int movieId) {

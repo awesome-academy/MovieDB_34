@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -16,6 +17,7 @@ import com.cris.nvh.moviedb.BuildConfig;
 import com.cris.nvh.moviedb.R;
 import com.cris.nvh.moviedb.adapter.CategoryAdapter;
 import com.cris.nvh.moviedb.adapter.CategoryAdapter.CategoryViewHolder.MoviesAdapter;
+import com.cris.nvh.moviedb.adapter.ProducerAdapter;
 import com.cris.nvh.moviedb.adapter.SlideAdapter;
 import com.cris.nvh.moviedb.adapter.TrailerAdapter;
 import com.cris.nvh.moviedb.data.model.Cast;
@@ -95,19 +97,28 @@ public class BindingUtils {
     @BindingAdapter("bindVideos")
     public static void bindVideos(RecyclerView recycler, List<Video> videos) {
         TrailerAdapter adapter = (TrailerAdapter) recycler.getAdapter();
-        if (adapter != null) {
+        if (adapter != null && videos != null) {
             adapter.update(videos);
         }
     }
 
     @BindingAdapter("bindProduces")
     public static void setProducesForRecyclerView(RecyclerView recyclerView,
-                                                  ObservableList<Company> companies) {
+                                                  List<Company> companies) {
+        ProducerAdapter adapter = (ProducerAdapter) recyclerView.getAdapter();
+        if (adapter != null && companies != null) {
+            adapter.update(companies);
+        }
     }
 
     @BindingAdapter("bindActors")
     public static void setActorsForRecyclerView(RecyclerView recyclerView,
                                                 ObservableList<Cast> actors) {
+    }
+
+    @BindingAdapter("bindResults")
+    public static void setResultsText(TextView textView, int size) {
+        textView.setText(new StringBuilder("Result: ").append(size).toString());
     }
 
     @BindingAdapter("imageUrl")
@@ -145,7 +156,7 @@ public class BindingUtils {
 
     @BindingAdapter("youTubeThumbnailView")
     public static void setYouTubeThumbnail(YouTubeThumbnailView thumbnailView,
-                                                         final String videoKey) {
+                                           final String videoKey) {
         YouTubeThumbnailView.OnInitializedListener listener =
                 new YouTubeThumbnailView.OnInitializedListener() {
                     @Override

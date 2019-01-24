@@ -49,7 +49,8 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerV
     }
 
     public void update(List<Video> videos) {
-        mVideos = videos;
+        mVideos.clear();
+        mVideos.addAll(videos);
         notifyDataSetChanged();
     }
 
