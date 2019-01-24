@@ -12,15 +12,20 @@ import android.widget.Spinner;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.cris.nvh.moviedb.BuildConfig;
 import com.cris.nvh.moviedb.R;
 import com.cris.nvh.moviedb.adapter.CategoryAdapter;
 import com.cris.nvh.moviedb.adapter.CategoryAdapter.CategoryViewHolder.MoviesAdapter;
 import com.cris.nvh.moviedb.adapter.SlideAdapter;
+import com.cris.nvh.moviedb.adapter.TrailerAdapter;
 import com.cris.nvh.moviedb.data.model.Cast;
 import com.cris.nvh.moviedb.data.model.Company;
 import com.cris.nvh.moviedb.data.model.Genre;
 import com.cris.nvh.moviedb.data.model.Movie;
 import com.cris.nvh.moviedb.data.model.Video;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubeThumbnailLoader;
+import com.google.android.youtube.player.YouTubeThumbnailView;
 
 import java.util.List;
 import java.util.Timer;
@@ -88,7 +93,11 @@ public class BindingUtils {
     }
 
     @BindingAdapter("bindVideos")
-    public static void bindVideos(RecyclerView recycler, ObservableList<Video> videos) {
+    public static void bindVideos(RecyclerView recycler, List<Video> videos) {
+        TrailerAdapter adapter = (TrailerAdapter) recycler.getAdapter();
+        if (adapter != null) {
+            adapter.update(videos);
+        }
     }
 
     @BindingAdapter("bindProduces")
@@ -132,5 +141,37 @@ public class BindingUtils {
         };
         Timer timer = new Timer();
         timer.schedule(timerTask, DELAY, DURATION);
+    }
+
+    @BindingAdapter("youTubeThumbnailView")
+    public static void setYouTubeThumbnail(YouTubeThumbnailView thumbnailView,
+                                                         final String videoKey) {
+        YouTubeThumbnailView.OnInitializedListener listener =
+                new YouTubeThumbnailView.OnInitializedListener() {
+                    @Override
+                    public void onInitializationSuccess(YouTubeThumbnailView view,
+                                                        final YouTubeThumbnailLoader loader) {
+                        loader.setVideo(videoKey);
+                        loader.setOnThumbnailLoadedListener(
+                                new YouTubeThumbnailLoader.OnThumbnailLoadedListener() {
+                                    @Override
+                                    public void onThumbnailLoaded(
+                                            YouTubeThumbnailView youTubeThumbnailView, String s) {
+                                        loader.release();
+                                    }
+
+                                    @Override
+                                    public void onThumbnailError(YouTubeThumbnailView view,
+                                                                 YouTubeThumbnailLoader.ErrorReason error) {
+                                    }
+                                });
+                    }
+
+                    @Override
+                    public void onInitializationFailure(YouTubeThumbnailView view,
+                                                        YouTubeInitializationResult result) {
+                    }
+                };
+        thumbnailView.initialize(BuildConfig.YOUTUBE_API_KEY, listener);
     }
 }

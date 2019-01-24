@@ -31,7 +31,7 @@ import static com.cris.nvh.moviedb.ui.home.HomeFragment.EXTRA_MOVIE;
  */
 
 public class MovieDetailsActivity extends AppCompatActivity implements OnChangeVideoListener,
-        MovieDetailNavigator {
+        MovieDetailNavigator, TrailerFragment.OnTrailerSelectedListener {
     private static final int DURATION = 1000;
     private static final int FROMALPHA = 0;
     private static final int TOALPHA = 1;
@@ -54,6 +54,16 @@ public class MovieDetailsActivity extends AppCompatActivity implements OnChangeV
     }
 
     @Override
+    public void playVideo() {
+        mYoutubePlayerFragment.playVideo();
+    }
+
+    @Override
+    public boolean isPlaying() {
+        return mYoutubePlayerFragment.isPlaying();
+    }
+
+    @Override
     public void startSearchActivity() {
         startActivity(SearchActivity.getIntent(this));
     }
@@ -63,6 +73,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements OnChangeV
         onBackPressed();
     }
 
+    @Override
+    public void onTrailerSelected(String videoKey) {
+        mYoutubePlayerFragment.setVideoKey(videoKey);
+    }
 
     private void initViewModel() {
         Movie movie = getIntent().getParcelableExtra(EXTRA_MOVIE);
@@ -91,6 +105,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements OnChangeV
         InfoFragment infoFragment = InfoFragment.newInstance();
         infoFragment.setViewModel(mViewModel);
         TrailerFragment trailerFragment = TrailerFragment.newInstance();
+        trailerFragment.setViewModel(mViewModel);
         CastFragment castFragment = CastFragment.newInstance();
         ProducerFragment produceFragment = ProducerFragment.newInstance();
         MoviePagerAdapter pagerAdapter = new MoviePagerAdapter(getSupportFragmentManager());
