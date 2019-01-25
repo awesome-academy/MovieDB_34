@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data></data>
+    <data>
+
+        <variable
+            name="movieVM"
+            type="com.cris.nvh.moviedb.ui.moviedetails.MovieDetailsViewModel" />
+
+    </data>
 
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -9,19 +15,25 @@
 
         <TextView
             android:id="@+id/text_producer_result"
+            bindResults="@{movieVM.movieObservable.companies.size()}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp_10"
             android:layout_marginStart="@dimen/dp_5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_producer"
+            bindProduces="@{movieVM.movieObservable.companies}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_10"
+            app:layoutManager="android.support.v7.widget.GridLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_producer_result"
+            app:spanCount="2" />
 
     </android.support.constraint.ConstraintLayout>
 

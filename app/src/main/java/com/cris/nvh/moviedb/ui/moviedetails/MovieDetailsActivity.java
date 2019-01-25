@@ -49,6 +49,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements OnChangeV
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mViewModel.clear();
+    }
+
+    @Override
     public void setVideoKey(String videoKey) {
         mYoutubePlayerFragment.setVideoKey(videoKey);
     }
@@ -108,6 +114,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements OnChangeV
         trailerFragment.setViewModel(mViewModel);
         CastFragment castFragment = CastFragment.newInstance();
         ProducerFragment produceFragment = ProducerFragment.newInstance();
+        produceFragment.setViewModel(mViewModel);
         MoviePagerAdapter pagerAdapter = new MoviePagerAdapter(getSupportFragmentManager());
         pagerAdapter.addFragment(infoFragment, getString(R.string.title_information));
         pagerAdapter.addFragment(trailerFragment, getString(R.string.title_trailer));
