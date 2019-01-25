@@ -4,6 +4,7 @@ import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
@@ -28,9 +29,11 @@ import static com.cris.nvh.moviedb.util.Constant.IMAGE_QUALITY_MAX;
 
 public class ActorAdapter extends RecyclerView.Adapter<ActorAdapter.ActorViewHolder> {
     private List<Cast> mActors;
+    private OnClickActorListener mListener;
 
-    public ActorAdapter() {
+    public ActorAdapter(OnClickActorListener listener) {
         mActors = new ArrayList<>();
+        mListener = listener;
     }
 
     @NonNull
@@ -39,7 +42,7 @@ public class ActorAdapter extends RecyclerView.Adapter<ActorAdapter.ActorViewHol
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         ItemActorBinding binding =
                 DataBindingUtil.inflate(inflater, R.layout.item_actor, viewGroup, false);
-        return new ActorViewHolder(binding);
+        return new ActorViewHolder(binding, mListener);
     }
 
     @Override
@@ -58,15 +61,22 @@ public class ActorAdapter extends RecyclerView.Adapter<ActorAdapter.ActorViewHol
         notifyDataSetChanged();
     }
 
-    public static class ActorViewHolder extends RecyclerView.ViewHolder {
+    public static class ActorViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ItemActorBinding mBinding;
         private ItemCastViewModel mViewModel;
+        private OnClickActorListener mListener;
 
-        public ActorViewHolder(ItemActorBinding binding) {
+        public ActorViewHolder(ItemActorBinding binding, OnClickActorListener listener) {
             super(binding.getRoot());
             mBinding = binding;
+            mListener = listener;
             mViewModel = new ItemCastViewModel();
             mBinding.setActorVM(mViewModel);
+        }
+
+        @Override
+        public void onClick(View view) {
+            mListener.onClickActor(String.valueOf(mViewModel.cast.get().getId()));
         }
 
         public void bindData(Cast actor) {
@@ -80,5 +90,9 @@ public class ActorAdapter extends RecyclerView.Adapter<ActorAdapter.ActorViewHol
                     .apply(requestOptions.circleCropTransform())
                     .into(mBinding.imageActor);
         }
+    }
+
+    public interface OnClickActorListener {
+        void onClickActor(String id);
     }
 }
