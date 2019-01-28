@@ -31,7 +31,8 @@ import static com.cris.nvh.moviedb.ui.home.HomeFragment.EXTRA_MOVIE;
  */
 
 public class MovieDetailsActivity extends AppCompatActivity implements OnChangeVideoListener,
-        MovieDetailNavigator, TrailerFragment.OnTrailerSelectedListener {
+        MovieDetailNavigator, TrailerFragment.OnTrailerSelectedListener,
+        ProducerFragment.OnProducerSelectedListener, CastFragment.OnActorSelectedListener {
     private static final int DURATION = 1000;
     private static final int FROMALPHA = 0;
     private static final int TOALPHA = 1;
@@ -82,6 +83,14 @@ public class MovieDetailsActivity extends AppCompatActivity implements OnChangeV
     @Override
     public void onTrailerSelected(String videoKey) {
         mYoutubePlayerFragment.setVideoKey(videoKey);
+    }
+
+    @Override
+    public void onProducerSelected(String id) {
+    }
+
+    @Override
+    public void onActorSelected(String id) {
     }
 
     private void initViewModel() {

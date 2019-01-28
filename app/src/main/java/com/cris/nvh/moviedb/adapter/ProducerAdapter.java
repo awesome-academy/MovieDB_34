@@ -4,6 +4,7 @@ import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.cris.nvh.moviedb.R;
@@ -21,9 +22,11 @@ import java.util.List;
 
 public class ProducerAdapter extends RecyclerView.Adapter<ProducerAdapter.ProducerViewHolder> {
     private List<Company> mCompanies;
+    private OnClickProducerListener mListener;
 
-    public ProducerAdapter() {
+    public ProducerAdapter(OnClickProducerListener listener) {
         mCompanies = new ArrayList<>();
+        mListener = listener;
     }
 
     @NonNull
@@ -32,7 +35,7 @@ public class ProducerAdapter extends RecyclerView.Adapter<ProducerAdapter.Produc
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         ItemProducerBinding binding =
                 DataBindingUtil.inflate(inflater, R.layout.item_producer, viewGroup, false);
-        return new ProducerAdapter.ProducerViewHolder(binding);
+        return new ProducerAdapter.ProducerViewHolder(binding, mListener);
     }
 
     @Override
@@ -52,12 +55,19 @@ public class ProducerAdapter extends RecyclerView.Adapter<ProducerAdapter.Produc
     }
 
 
-    public static class ProducerViewHolder extends RecyclerView.ViewHolder {
+    public static class ProducerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ItemProducerBinding mBinding;
         private ItemProducerViewModel mViewModel;
+        private OnClickProducerListener mListener;
 
-        public ProducerViewHolder(ItemProducerBinding binding) {
+        @Override
+        public void onClick(View view) {
+            mListener.onClickProducer(String.valueOf(mViewModel.company.get().getId()));
+        }
+
+        public ProducerViewHolder(ItemProducerBinding binding, OnClickProducerListener listener) {
             super(binding.getRoot());
+            mListener = listener;
             mBinding = binding;
             mViewModel = new ItemProducerViewModel();
             mBinding.setProducerVM(mViewModel);
@@ -66,5 +76,9 @@ public class ProducerAdapter extends RecyclerView.Adapter<ProducerAdapter.Produc
         public void bindData(Company company) {
             mViewModel.company.set(company);
         }
+    }
+
+    public interface OnClickProducerListener {
+        void onClickProducer(String companyId);
     }
 }
