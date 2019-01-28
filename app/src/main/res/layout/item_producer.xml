@@ -16,8 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/dp_10"
         android:layout_marginBottom="@dimen/dp_10"
-        app:cardBackgroundColor="@color/color_white"
-        app:cardCornerRadius="@dimen/dp_40">
+        app:cardBackgroundColor="@android:color/transparent">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -28,8 +27,8 @@
                 imageUrl="@{producerVM.company.logoPath}"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:scaleType="fitXY"
-                app:layout_constraintDimensionRatio="1:1"
+                android:scaleType="centerInside"
+                app:layout_constraintDimensionRatio="6:5"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

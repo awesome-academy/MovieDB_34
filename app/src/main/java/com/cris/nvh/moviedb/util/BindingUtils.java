@@ -15,6 +15,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.cris.nvh.moviedb.BuildConfig;
 import com.cris.nvh.moviedb.R;
+import com.cris.nvh.moviedb.adapter.ActorAdapter;
 import com.cris.nvh.moviedb.adapter.CategoryAdapter;
 import com.cris.nvh.moviedb.adapter.CategoryAdapter.CategoryViewHolder.MoviesAdapter;
 import com.cris.nvh.moviedb.adapter.ProducerAdapter;
@@ -113,12 +114,21 @@ public class BindingUtils {
 
     @BindingAdapter("bindActors")
     public static void setActorsForRecyclerView(RecyclerView recyclerView,
-                                                ObservableList<Cast> actors) {
+                                                List<Cast> actors) {
+        ActorAdapter adapter = (ActorAdapter) recyclerView.getAdapter();
+        if (adapter != null) {
+            adapter.update(actors);
+        }
     }
 
     @BindingAdapter("bindResults")
     public static void setResultsText(TextView textView, int size) {
         textView.setText(new StringBuilder("Result: ").append(size).toString());
+    }
+
+    @BindingAdapter({"bindActorName", "bindActorCharacter"})
+    public static void setActorName(TextView textView, String actorName, String actorCharacter) {
+        textView.setText(new StringBuilder(actorName).append("/").append(actorCharacter).toString());
     }
 
     @BindingAdapter("imageUrl")
