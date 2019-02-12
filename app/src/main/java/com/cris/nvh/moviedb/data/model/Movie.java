@@ -153,4 +153,16 @@ public class Movie implements Parcelable {
     public float calculateVoteRating() {
         return (mVoteAverage / 2);
     }
+
+    public void setBackdropPath(String backdropPath) {
+        mBackdropPath = backdropPath;
+    }
+
+    public void setTitle(String title) {
+        mTitle = title;
+    }
+
+    public void setVoteAverage(float voteAverage) {
+        mVoteAverage = voteAverage;
+    }
 }

@@ -1,16 +1,19 @@
 package com.cris.nvh.moviedb.ui.favorite;
 
+import android.app.Dialog;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.cris.nvh.moviedb.R;
 import com.cris.nvh.moviedb.adapter.CategoryAdapter.CategoryViewHolder.MoviesAdapter;
 import com.cris.nvh.moviedb.data.model.Movie;
 import com.cris.nvh.moviedb.data.repository.MovieRepository;
+import com.cris.nvh.moviedb.data.source.local.FavoriteReaderDBHelper;
 import com.cris.nvh.moviedb.data.source.local.LocalDataSource;
 import com.cris.nvh.moviedb.data.source.remote.RemoteDataSource;
 import com.cris.nvh.moviedb.databinding.FragmentFavoriteBinding;
@@ -25,10 +28,16 @@ public class FavoriteFragment extends Fragment implements MoviesAdapter.MovieIte
         FavoriteNavigator {
     private FavoriteViewModel mViewModel;
     private FragmentFavoriteBinding mBinding;
+    private RefreshHomeData mListener;
+    private int mSelectedMovieId;
 
     public static FavoriteFragment newInstance() {
         FavoriteFragment fragment = new FavoriteFragment();
         return fragment;
+    }
+
+    public void setListener(RefreshHomeData listener) {
+        mListener = listener;
     }
 
     @Override
@@ -47,9 +56,15 @@ public class FavoriteFragment extends Fragment implements MoviesAdapter.MovieIte
         mViewModel.refreshFavoriteMovies();
     }
 
+    public void refreshMovies() {
+        if (mViewModel != null)
+            mViewModel.refreshFavoriteMovies();
+    }
+
     private void initViewModel() {
+        FavoriteReaderDBHelper dbHelper = new FavoriteReaderDBHelper(getContext());
         MovieRepository movieRepository = MovieRepository.getInstance(
-                LocalDataSource.getInstance(),
+                LocalDataSource.getInstance(dbHelper),
                 RemoteDataSource.getInstance());
         mViewModel = new FavoriteViewModel(movieRepository);
     }
@@ -60,7 +75,16 @@ public class FavoriteFragment extends Fragment implements MoviesAdapter.MovieIte
     }
 
     @Override
+    public void onFavoriteImageClick(Movie movie) {
+        mSelectedMovieId = movie.getId();
+    }
+
+    @Override
     public void startMovieDetailActivity(Movie movie) {
         startActivity(MovieDetailsActivity.getIntent(getActivity(), movie));
+    }
+
+    public interface RefreshHomeData {
+        void onRefreshHomeFragment();
     }
 }

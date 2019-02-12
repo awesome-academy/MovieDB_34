@@ -11,10 +11,15 @@ import com.cris.nvh.moviedb.data.source.MovieDataSource;
 
 public class LocalDataSource implements MovieDataSource.Local {
     private static LocalDataSource sLocal;
+    private FavoriteReaderDBHelper mDBHelper;
 
-    public static LocalDataSource getInstance() {
+    private LocalDataSource(FavoriteReaderDBHelper dbHelper) {
+        mDBHelper = dbHelper;
+    }
+
+    public static LocalDataSource getInstance(FavoriteReaderDBHelper dbHelper) {
         if (sLocal == null)
-            sLocal = new LocalDataSource();
+            sLocal = new LocalDataSource(dbHelper);
         return sLocal;
     }
 
