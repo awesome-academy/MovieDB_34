@@ -219,7 +219,7 @@ public class HomeViewModel extends BaseObservable {
 
     private void loadGenreMovies() {
         Disposable disposable = mMovieRepository
-                .getMoviesByGenre(genreField.get().getId(), DEFAULT_PAGE)
+                .getMoviesByGenre(String.valueOf(genreField.get().getId()), DEFAULT_PAGE)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<MovieResponse>() {

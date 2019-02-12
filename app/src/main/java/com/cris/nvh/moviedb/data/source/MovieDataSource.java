@@ -25,11 +25,11 @@ public interface MovieDataSource {
     interface Remote {
         Observable<MovieResponse> getMoviesByCategory(String category, int page);
 
-        Observable<MovieResponse> getMoviesByGenre(int genreId, int page);
+        Observable<MovieResponse> getMoviesByGenre(String genreId, int page);
 
-        Observable<MovieResponse> getMoviesByCast(int castId, int page);
+        Observable<MovieResponse> getMoviesByCast(String castId, int page);
 
-        Observable<MovieResponse> getMoviesByCompany(int companyId, int page);
+        Observable<MovieResponse> getMoviesByCompany(String companyId, int page);
 
         Observable<MovieResponse> getMoviesTrendingByDay();
 
