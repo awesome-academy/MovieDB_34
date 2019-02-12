@@ -16,6 +16,7 @@ import com.cris.nvh.moviedb.adapter.SlideAdapter;
 import com.cris.nvh.moviedb.data.annotation.CategoryRequest;
 import com.cris.nvh.moviedb.data.model.Movie;
 import com.cris.nvh.moviedb.data.repository.MovieRepository;
+import com.cris.nvh.moviedb.data.source.local.FavoriteReaderDBHelper;
 import com.cris.nvh.moviedb.data.source.local.LocalDataSource;
 import com.cris.nvh.moviedb.data.source.remote.RemoteDataSource;
 import com.cris.nvh.moviedb.databinding.FragmentHomeBinding;
@@ -106,9 +107,14 @@ public class HomeFragment extends Fragment implements HomeNavigator, SlideAdapte
         startMovieDetailActivity(movie);
     }
 
+    @Override
+    public void onFavoriteImageClick(Movie movie) {
+    }
+
     private void initViewModel() {
+        FavoriteReaderDBHelper dbHelper = new FavoriteReaderDBHelper(getContext());
         MovieRepository movieRepository = MovieRepository.getInstance(
-                LocalDataSource.getInstance(),
+                LocalDataSource.getInstance(dbHelper),
                 RemoteDataSource.getInstance());
         mHomeViewModel = new HomeViewModel(this, movieRepository);
     }

@@ -14,6 +14,7 @@ import com.cris.nvh.moviedb.R;
 import com.cris.nvh.moviedb.adapter.MoviePagerAdapter;
 import com.cris.nvh.moviedb.data.model.Movie;
 import com.cris.nvh.moviedb.data.repository.MovieRepository;
+import com.cris.nvh.moviedb.data.source.local.FavoriteReaderDBHelper;
 import com.cris.nvh.moviedb.data.source.local.LocalDataSource;
 import com.cris.nvh.moviedb.data.source.remote.RemoteDataSource;
 import com.cris.nvh.moviedb.databinding.ActivityMovieDetailBinding;
@@ -94,9 +95,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements OnChangeV
     }
 
     private void initViewModel() {
+        FavoriteReaderDBHelper dbHelper = new FavoriteReaderDBHelper(this);
         Movie movie = getIntent().getParcelableExtra(EXTRA_MOVIE);
         MovieRepository movieRepository = MovieRepository.getInstance(
-                LocalDataSource.getInstance(),
+                LocalDataSource.getInstance(dbHelper),
                 RemoteDataSource.getInstance());
         mViewModel = new MovieDetailsViewModel(movie.getId(), movieRepository);
         mViewModel.setOnChangeVideoListener(this);

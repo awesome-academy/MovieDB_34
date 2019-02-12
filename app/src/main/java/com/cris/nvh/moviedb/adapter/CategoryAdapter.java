@@ -1,5 +1,6 @@
 package com.cris.nvh.moviedb.adapter;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableList;
@@ -82,6 +83,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         public static class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder> {
             private ObservableList<Movie> mMovies;
             private MovieItemClickListener mListener;
+            private Context mContext;
 
             public MoviesAdapter(MovieItemClickListener listener) {
                 mListener = listener;
@@ -90,13 +92,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
             @Override
             public MovieViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+                mContext = viewGroup.getContext();
                 ItemMovieBinding binding = DataBindingUtil.inflate(
                         LayoutInflater.from(viewGroup.getContext()),
                         R.layout.item_movie,
                         viewGroup,
                         false
                 );
-                return new MovieViewHolder(binding, mListener);
+                return new MovieViewHolder(mContext, binding, mListener);
             }
 
             @Override
@@ -118,28 +121,38 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             public static class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
                 private ItemMovieBinding mMovieBinding;
                 private MovieItemClickListener mListener;
+                private Context mContext;
 
-                public MovieViewHolder(ItemMovieBinding binding, MovieItemClickListener listener) {
+                public MovieViewHolder(Context context, ItemMovieBinding binding, MovieItemClickListener listener) {
                     super(binding.getRoot());
                     mMovieBinding = binding;
                     mListener = listener;
+                    mContext = context;
                 }
 
                 public void bindData(Movie movie) {
-                    mMovieBinding.setMovieVM(new MovieViewModel());
+                    mMovieBinding.setMovieVM(new MovieViewModel(mContext));
                     mMovieBinding.getMovieVM().setMovie(movie);
+                    mMovieBinding.imageDeleteFavorities.setOnClickListener(this);
                     mMovieBinding.itemMovie.setOnClickListener(this);
                     mMovieBinding.executePendingBindings();
                 }
 
                 @Override
                 public void onClick(View view) {
-                    mListener.onMovieItemClick(mMovieBinding.getMovieVM().getMovie());
+                    Movie movie = mMovieBinding.getMovieVM().getMovie();
+                    if (view.getId() == R.id.image_delete_favorities) {
+                        mListener.onFavoriteImageClick(movie);
+                        return;
+                    }
+                    mListener.onMovieItemClick(movie);
                 }
             }
 
             public interface MovieItemClickListener {
                 void onMovieItemClick(Movie movie);
+
+                void onFavoriteImageClick(Movie movie);
             }
         }
     }
