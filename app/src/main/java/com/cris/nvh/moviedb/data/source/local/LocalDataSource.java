@@ -4,6 +4,8 @@ import android.databinding.ObservableArrayList;
 import com.cris.nvh.moviedb.data.model.Movie;
 import com.cris.nvh.moviedb.data.source.MovieDataSource;
 
+import java.util.List;
+
 /**
  * Created by nvh
  * Contact: toiyeuthethao1997@gmail.com
@@ -39,7 +41,7 @@ public class LocalDataSource implements MovieDataSource.Local {
     }
 
     @Override
-    public ObservableArrayList<Movie> getFavoriteMovies() {
-        return null;
+    public List<Movie> getFavoriteMovies() {
+        return mDBHelper.getMovies();
     }
 }

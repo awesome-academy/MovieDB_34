@@ -40,12 +40,12 @@ public class RemoteDataSource implements MovieDataSource.Remote {
 
     @Override
     public Observable<MovieResponse> getMoviesByCast(String castId, int page) {
-        return null;
+        return mRequest.getMoviesByCast(castId, page);
     }
 
     @Override
     public Observable<MovieResponse> getMoviesByCompany(String companyId, int page) {
-        return null;
+        return mRequest.getMoviesByCompany(companyId, page);
     }
 
     @Override
@@ -65,6 +65,6 @@ public class RemoteDataSource implements MovieDataSource.Remote {
 
     @Override
     public Observable<MovieResponse> searchMovie(String input, int page) {
-        return null;
+        return mRequest.searchMovie("movie", input, page);
     }
 }

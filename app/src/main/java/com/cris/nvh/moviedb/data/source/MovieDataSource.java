@@ -1,9 +1,11 @@
 package com.cris.nvh.moviedb.data.source;
 
-import android.databinding.ObservableArrayList;
 import com.cris.nvh.moviedb.data.model.GenreResponse;
 import com.cris.nvh.moviedb.data.model.Movie;
 import com.cris.nvh.moviedb.data.model.MovieResponse;
+
+import java.util.List;
+
 import io.reactivex.Observable;
 
 /**
@@ -19,7 +21,7 @@ public interface MovieDataSource {
 
         boolean isFavorite(int movieID);
 
-        ObservableArrayList<Movie> getFavoriteMovies();
+        List<Movie> getFavoriteMovies();
     }
 
     interface Remote {

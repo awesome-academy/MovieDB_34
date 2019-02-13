@@ -1,13 +1,13 @@
 package com.cris.nvh.moviedb.data.repository;
 
-import android.databinding.ObservableArrayList;
-
 import com.cris.nvh.moviedb.data.model.GenreResponse;
 import com.cris.nvh.moviedb.data.model.Movie;
 import com.cris.nvh.moviedb.data.model.MovieResponse;
 import com.cris.nvh.moviedb.data.source.MovieDataSource;
 import com.cris.nvh.moviedb.data.source.local.LocalDataSource;
 import com.cris.nvh.moviedb.data.source.remote.RemoteDataSource;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 
@@ -49,8 +49,8 @@ public class MovieRepository implements MovieDataSource.Local, MovieDataSource.R
     }
 
     @Override
-    public ObservableArrayList<Movie> getFavoriteMovies() {
-        return null;
+    public List<Movie> getFavoriteMovies() {
+        return mLocal.getFavoriteMovies();
     }
 
     @Override
@@ -65,12 +65,12 @@ public class MovieRepository implements MovieDataSource.Local, MovieDataSource.R
 
     @Override
     public Observable<MovieResponse> getMoviesByCast(String castId, int page) {
-        return null;
+        return mRemote.getMoviesByCast(castId, page);
     }
 
     @Override
     public Observable<MovieResponse> getMoviesByCompany(String companyId, int page) {
-        return null;
+        return mRemote.getMoviesByCompany(companyId, page);
     }
 
     @Override
@@ -90,6 +90,6 @@ public class MovieRepository implements MovieDataSource.Local, MovieDataSource.R
 
     @Override
     public Observable<MovieResponse> searchMovie(String input, int page) {
-        return null;
+        return mRemote.searchMovie(input, page);
     }
 }
