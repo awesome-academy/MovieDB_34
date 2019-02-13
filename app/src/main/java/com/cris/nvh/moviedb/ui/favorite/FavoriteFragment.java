@@ -77,11 +77,36 @@ public class FavoriteFragment extends Fragment implements MoviesAdapter.MovieIte
     @Override
     public void onFavoriteImageClick(Movie movie) {
         mSelectedMovieId = movie.getId();
+        openDialog();
     }
 
     @Override
     public void startMovieDetailActivity(Movie movie) {
         startActivity(MovieDetailsActivity.getIntent(getActivity(), movie));
+    }
+
+    private void openDialog() {
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.setContentView(R.layout.custom_dialog);
+        dialog.setTitle("Are you sure??");
+        Button buttonCancel = dialog.findViewById(R.id.button_cancel);
+        Button buttonOk = dialog.findViewById(R.id.button_ok);
+        buttonOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mViewModel.deleteFavoriteMovie(mSelectedMovieId);
+                mViewModel.refreshFavoriteMovies();
+                mListener.onRefreshHomeFragment();
+                dialog.dismiss();
+            }
+        });
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+            }
+        });
+        dialog.show();
     }
 
     public interface RefreshHomeData {
