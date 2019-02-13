@@ -6,19 +6,25 @@ import android.databinding.ObservableBoolean;
 
 import com.cris.nvh.moviedb.data.model.Movie;
 import com.cris.nvh.moviedb.data.repository.MovieRepository;
+import com.cris.nvh.moviedb.data.source.local.FavoriteReaderDBHelper;
+import com.cris.nvh.moviedb.data.source.local.LocalDataSource;
+import com.cris.nvh.moviedb.data.source.remote.RemoteDataSource;
 
 public class MovieViewModel extends BaseObservable {
+    public final ObservableBoolean isFavoriteMovie;
     private Movie mMovie;
     private Context mContext;
     private MovieRepository mMovieRepository;
 
     public MovieViewModel() {
         mMovie = new Movie();
+        isFavoriteMovie = new ObservableBoolean();
     }
 
     public MovieViewModel(Context context) {
         mContext = context;
         mMovie = new Movie();
+        isFavoriteMovie = new ObservableBoolean();
     }
 
     public int getId() {
@@ -55,10 +61,20 @@ public class MovieViewModel extends BaseObservable {
 
     public void setMovie(Movie movie) {
         mMovie = movie;
+        isFavoriteMovie.set(checkFavorite());
         notifyChange();
     }
 
     public Movie getMovie() {
         return mMovie;
+    }
+
+    public boolean checkFavorite() {
+        FavoriteReaderDBHelper dbHelper = new FavoriteReaderDBHelper(mContext);
+        mMovieRepository = MovieRepository.getInstance(
+                LocalDataSource.getInstance(dbHelper),
+                RemoteDataSource.getInstance());
+        isFavoriteMovie.set(mMovieRepository.isFavorite(mMovie.getId()));
+        return isFavoriteMovie.get();
     }
 }

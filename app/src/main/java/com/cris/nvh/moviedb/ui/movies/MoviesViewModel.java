@@ -7,6 +7,7 @@ import android.databinding.ObservableList;
 import android.view.View;
 
 import com.cris.nvh.moviedb.data.annotation.CategoryRequest;
+import com.cris.nvh.moviedb.data.annotation.GenresKey;
 import com.cris.nvh.moviedb.data.model.Movie;
 import com.cris.nvh.moviedb.data.model.MovieResponse;
 import com.cris.nvh.moviedb.data.repository.MovieRepository;
@@ -16,6 +17,11 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+
+import static com.cris.nvh.moviedb.ui.home.HomeViewModel.NOW_PLAYING;
+import static com.cris.nvh.moviedb.ui.home.HomeViewModel.POPULAR;
+import static com.cris.nvh.moviedb.ui.home.HomeViewModel.TOP_RATED;
+import static com.cris.nvh.moviedb.ui.home.HomeViewModel.UPCOMING;
 
 /**
  * Created by nvh
@@ -79,9 +85,25 @@ public class MoviesViewModel extends BaseObservable {
                 loadMoviesByTrending();
                 break;
             case CategoryRequest.CATEGORY:
+                loadMoviesByCategory(convertTitleToKey(id));
                 break;
             default:
                 break;
+        }
+    }
+
+    private String convertTitleToKey(String string) {
+        switch (string) {
+            case TOP_RATED:
+                return GenresKey.TOP_RATED;
+            case NOW_PLAYING:
+                return GenresKey.NOW_PLAYING;
+            case UPCOMING:
+                return GenresKey.UPCOMING;
+            case POPULAR:
+                return GenresKey.POPULAR;
+            default:
+                return null;
         }
     }
 
