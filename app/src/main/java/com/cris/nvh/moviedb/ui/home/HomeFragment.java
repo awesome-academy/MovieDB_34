@@ -1,5 +1,6 @@
 package com.cris.nvh.moviedb.ui.home;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,9 +22,12 @@ import com.cris.nvh.moviedb.data.source.local.LocalDataSource;
 import com.cris.nvh.moviedb.data.source.remote.RemoteDataSource;
 import com.cris.nvh.moviedb.databinding.FragmentHomeBinding;
 import com.cris.nvh.moviedb.ui.moviedetails.MovieDetailsActivity;
+import com.cris.nvh.moviedb.ui.movies.MoviesActivity;
 import com.cris.nvh.moviedb.ui.search.SearchActivity;
 
-import static com.cris.nvh.moviedb.ui.movies.MoviesActivity.getIntent;
+import static com.cris.nvh.moviedb.ui.movies.MoviesActivity.EXTRA_MOVIES_TITLE;
+import static com.cris.nvh.moviedb.ui.movies.MoviesActivity.EXTRA_MOVIES_TYPE;
+import static com.cris.nvh.moviedb.ui.movies.MoviesActivity.EXTRA_TYPE_ID;
 
 /**
  * Created by nvh
@@ -37,6 +41,7 @@ public class HomeFragment extends Fragment implements HomeNavigator, SlideAdapte
     private HomeViewModel mHomeViewModel;
     private FragmentHomeBinding mHomeBinding;
     private SlideAdapter mAdapter;
+    private NeedToRefreshListener mListener;
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -65,8 +70,12 @@ public class HomeFragment extends Fragment implements HomeNavigator, SlideAdapte
     }
 
     @Override
-    public void startMoviesActivity(String id, int getBy) {
-        startActivity(getIntent(getActivity()));
+    public void startMoviesActivity(String id, String name, int type) {
+        Intent intent = MoviesActivity.getIntent(getActivity());
+        intent.putExtra(EXTRA_MOVIES_TYPE, type);
+        intent.putExtra(EXTRA_TYPE_ID, id);
+        intent.putExtra(EXTRA_MOVIES_TITLE, name);
+        startActivity(intent);
     }
 
     @Override
@@ -86,7 +95,7 @@ public class HomeFragment extends Fragment implements HomeNavigator, SlideAdapte
 
     @Override
     public void onCategoryClick(String type) {
-        startMoviesActivity(type, CategoryRequest.CATEGORY);
+        startMoviesActivity(type, type, CategoryRequest.CATEGORY);
     }
 
     @Override
@@ -109,6 +118,16 @@ public class HomeFragment extends Fragment implements HomeNavigator, SlideAdapte
 
     @Override
     public void onFavoriteImageClick(Movie movie) {
+        mHomeViewModel.onFavoriteImageClick(movie);
+        mListener.refreshFavoriteFragment();
+    }
+
+    public void setListener(NeedToRefreshListener listener) {
+        mListener = listener;
+    }
+
+    public void updateFavoriteMovie() {
+        mHomeViewModel.updateFavoriteMovie();
     }
 
     private void initViewModel() {
@@ -117,5 +136,9 @@ public class HomeFragment extends Fragment implements HomeNavigator, SlideAdapte
                 LocalDataSource.getInstance(dbHelper),
                 RemoteDataSource.getInstance());
         mHomeViewModel = new HomeViewModel(this, movieRepository);
+    }
+
+    public interface NeedToRefreshListener {
+        void refreshFavoriteFragment();
     }
 }

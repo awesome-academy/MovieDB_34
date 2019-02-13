@@ -1,6 +1,7 @@
 package com.cris.nvh.moviedb.ui.home;
 
 import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
@@ -8,6 +9,7 @@ import android.databinding.ObservableList;
 import android.view.View;
 import android.widget.AdapterView;
 
+import com.android.databinding.library.baseAdapters.BR;
 import com.cris.nvh.moviedb.data.annotation.CategoryRequest;
 import com.cris.nvh.moviedb.data.annotation.GenresKey;
 import com.cris.nvh.moviedb.data.model.Genre;
@@ -43,10 +45,11 @@ public class HomeViewModel extends BaseObservable {
     private static final int FIRST_PAGE = 1;
     private static final int FIRST_INDEX = 0;
     private static final int LAST_INDEX = 5;
-    private static final String TOP_RATED = "TOP RATE";
-    private static final String NOW_PLAYING = "NOW PLAYING";
-    private static final String POPULAR = "POPULAR";
-    private static final String UPCOMING = "UPCOMING";
+    public static final String TOP_RATED = "TOP RATE";
+    public static final String NOW_PLAYING = "NOW PLAYING";
+    public static final String POPULAR = "POPULAR";
+    public static final String UPCOMING = "UPCOMING";
+    private static final String TRENDING = "TRENDING";
     private MovieRepository mMovieRepository;
     private CompositeDisposable mCompositeDisposable;
     private HomeNavigator mNavigator;
@@ -79,7 +82,7 @@ public class HomeViewModel extends BaseObservable {
     }
 
     public void onGenreClick(Genre genre) {
-        mNavigator.startMoviesActivity(String.valueOf(genre.getId()), CategoryRequest.GENRE);
+        mNavigator.startMoviesActivity(String.valueOf(genre.getId()), genre.getName(), CategoryRequest.GENRE);
     }
 
     public void onSearchClick() {
@@ -87,7 +90,25 @@ public class HomeViewModel extends BaseObservable {
     }
 
     public void onFloatingButtonClick() {
-        mNavigator.startMoviesActivity(null, CategoryRequest.TRENDING);
+        mNavigator.startMoviesActivity(null, TRENDING, CategoryRequest.TRENDING);
+    }
+
+    public void onFavoriteImageClick(Movie movie) {
+        int movieId = movie.getId();
+        if (mMovieRepository.isFavorite(movieId)) {
+            mMovieRepository.deleteFromFavorite(movieId);
+            return;
+        }
+        mMovieRepository.insertToFavorite(movie);
+    }
+
+    @Bindable
+    public ObservableList<ObservableList<Movie>> getListCategoryMovies() {
+        return listCategoryMovies;
+    }
+
+    public void updateFavoriteMovie() {
+        notifyPropertyChanged(BR.listCategoryMovies);
     }
 
     private void initData() {

@@ -143,6 +143,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                     Movie movie = mMovieBinding.getMovieVM().getMovie();
                     if (view.getId() == R.id.image_delete_favorities) {
                         mListener.onFavoriteImageClick(movie);
+                        mMovieBinding.getMovieVM().checkFavorite();
                         return;
                     }
                     mListener.onMovieItemClick(movie);

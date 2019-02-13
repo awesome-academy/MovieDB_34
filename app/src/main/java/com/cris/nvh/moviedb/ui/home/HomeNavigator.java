@@ -8,9 +8,9 @@ import com.cris.nvh.moviedb.data.model.Movie;
  */
 
 public interface HomeNavigator {
-    public void startMoviesActivity(String id, int getBy);
+    void startMoviesActivity(String id, String name, int getBy);
 
-    public void startMovieDetailActivity(Movie movie);
+    void startMovieDetailActivity(Movie movie);
 
-    public void startSearchActivity();
+    void startSearchActivity();
 }
