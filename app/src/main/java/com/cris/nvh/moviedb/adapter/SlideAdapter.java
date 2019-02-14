@@ -22,7 +22,7 @@ import java.util.List;
 
 public class SlideAdapter extends PagerAdapter implements View.OnClickListener {
     private ObservableList<Movie> mMovies;
-    private int mCurrentPosition;
+    private static int sCurrentPosition;
     private TopTrendingClickListener mListener;
 
     public SlideAdapter(TopTrendingClickListener listener) {
@@ -69,14 +69,14 @@ public class SlideAdapter extends PagerAdapter implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        mListener.onTopTrendingClick(mMovies.get(mCurrentPosition));
+        mListener.onTopTrendingClick(mMovies.get(sCurrentPosition));
     }
 
     public interface TopTrendingClickListener {
         void onTopTrendingClick(Movie movie);
     }
 
-    public void setCurrentPosition(int position) {
-        mCurrentPosition = position;
+    public static void setCurrentPosition(int position) {
+        sCurrentPosition = position;
     }
 }

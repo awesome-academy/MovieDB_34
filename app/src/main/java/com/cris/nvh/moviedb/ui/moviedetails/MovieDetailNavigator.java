@@ -8,4 +8,5 @@ package com.cris.nvh.moviedb.ui.moviedetails;
 public interface MovieDetailNavigator {
     void startSearchActivity();
     void onBackPress();
+    void startMoviesActivity(int type, String name, String id);
 }

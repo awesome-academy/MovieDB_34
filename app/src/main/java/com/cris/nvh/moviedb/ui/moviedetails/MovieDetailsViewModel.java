@@ -29,6 +29,7 @@ public class MovieDetailsViewModel extends BaseObservable {
     private MovieRepository mMovieRepository;
     private MovieDetailNavigator mNavigator;
     private static final String APPEND_TO_MOVIE_DETAIL = "videos,credits";
+    private static final int INDEX_ZERO = 0;
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
     public MovieDetailsViewModel(int movieId, MovieRepository movieRepository) {
@@ -41,6 +42,15 @@ public class MovieDetailsViewModel extends BaseObservable {
         loadMovie(movieId);
     }
 
+    public void updateFavoriteMovie() {
+        if (movieObservable.get() != null)
+            checkIsFavorite(movieObservable.get().getId());
+    }
+
+    public void checkIsFavorite(int movieId) {
+        isFavoriteMovieObservable.set(mMovieRepository.isFavorite(movieId));
+    }
+
     public void setNavigator(MovieDetailNavigator navigator) {
         mNavigator = navigator;
     }
@@ -49,7 +59,7 @@ public class MovieDetailsViewModel extends BaseObservable {
         mNavigator.startSearchActivity();
     }
 
-    public void onBackPress(){
+    public void onBackPress() {
         mNavigator.onBackPress();
     }
 
@@ -57,11 +67,22 @@ public class MovieDetailsViewModel extends BaseObservable {
         mListener = listener;
     }
 
+    public void setFavoriteMovie(Movie movie) {
+        if (!isFavoriteMovieObservable.get()) {
+            mMovieRepository.insertToFavorite(movie);
+            isFavoriteMovieObservable.set(true);
+            return;
+        }
+        mMovieRepository.deleteFromFavorite(movie.getId());
+        isFavoriteMovieObservable.set(false);
+    }
+
     public void clear() {
         mCompositeDisposable.dispose();
     }
 
     private void loadMovie(final int movieId) {
+        checkIsFavorite(movieId);
         Disposable disposable = mMovieRepository.getMovieDetail(movieId, APPEND_TO_MOVIE_DETAIL)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -69,10 +90,10 @@ public class MovieDetailsViewModel extends BaseObservable {
                     @Override
                     public void accept(Movie movie) {
                         movieObservable.set(movie);
-                        if (movie.getVideoResponse().getVideos().size() > 0) {
+                        if (movie.getVideoResponse().getVideos().size() > INDEX_ZERO) {
                             mListener.setVideoKey(
-                                    movie.getVideoResponse().getVideos().get(0).getKey());
-                            currentVideoIndex.set(0);
+                                    movie.getVideoResponse().getVideos().get(INDEX_ZERO).getKey());
+                            currentVideoIndex.set(INDEX_ZERO);
                             isPlaying.set(mListener.isPlaying());
                         }
                     }

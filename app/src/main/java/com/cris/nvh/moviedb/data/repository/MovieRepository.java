@@ -35,17 +35,17 @@ public class MovieRepository implements MovieDataSource.Local, MovieDataSource.R
 
     @Override
     public boolean insertToFavorite(Movie movie) {
-        return false;
+        return mLocal.insertToFavorite(movie);
     }
 
     @Override
     public boolean deleteFromFavorite(int movieId) {
-        return false;
+        return mLocal.deleteFromFavorite(movieId);
     }
 
     @Override
     public boolean isFavorite(int movieID) {
-        return false;
+        return mLocal.isFavorite(movieID);
     }
 
     @Override

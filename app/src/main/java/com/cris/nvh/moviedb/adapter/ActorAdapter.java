@@ -72,11 +72,12 @@ public class ActorAdapter extends RecyclerView.Adapter<ActorAdapter.ActorViewHol
             mListener = listener;
             mViewModel = new ItemCastViewModel();
             mBinding.setActorVM(mViewModel);
+            mBinding.imageActor.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            mListener.onClickActor(String.valueOf(mViewModel.cast.get().getId()));
+            mListener.onClickActor(mViewModel.cast.get());
         }
 
         public void bindData(Cast actor) {
@@ -93,6 +94,6 @@ public class ActorAdapter extends RecyclerView.Adapter<ActorAdapter.ActorViewHol
     }
 
     public interface OnClickActorListener {
-        void onClickActor(String id);
+        void onClickActor(Cast cast);
     }
 }
