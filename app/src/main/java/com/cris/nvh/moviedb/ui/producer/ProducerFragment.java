@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.cris.nvh.moviedb.adapter.ProducerAdapter;
+import com.cris.nvh.moviedb.data.model.Company;
 import com.cris.nvh.moviedb.databinding.FragmentProducerBinding;
 import com.cris.nvh.moviedb.ui.moviedetails.MovieDetailsViewModel;
 import com.cris.nvh.moviedb.ui.trailer.TrailerFragment;
@@ -42,8 +43,8 @@ public class ProducerFragment extends Fragment implements ProducerAdapter.OnClic
     }
 
     @Override
-    public void onClickProducer(String companyId) {
-        mListener.onProducerSelected(companyId);
+    public void onClickProducer(Company company) {
+        mListener.onProducerSelected(company);
     }
 
     public static ProducerFragment newInstance() {
@@ -55,6 +56,6 @@ public class ProducerFragment extends Fragment implements ProducerAdapter.OnClic
     }
 
     public interface OnProducerSelectedListener{
-        void onProducerSelected(String id);
+        void onProducerSelected(Company company);
     }
 }

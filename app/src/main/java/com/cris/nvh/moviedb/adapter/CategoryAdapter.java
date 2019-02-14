@@ -50,9 +50,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     }
 
     public void update(ObservableList<ObservableList<Movie>> movies, ObservableList<String> categories) {
-        mMovies.clear();
+        mMovies = movies;
         mCategories = categories;
-        mMovies.addAll(movies);
         notifyDataSetChanged();
     }
 
@@ -113,8 +112,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             }
 
             public void update(ObservableList<Movie> movies) {
-                mMovies.clear();
-                mMovies.addAll(movies);
+                mMovies = movies;
                 notifyDataSetChanged();
             }
 

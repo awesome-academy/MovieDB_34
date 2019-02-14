@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.cris.nvh.moviedb.adapter.ActorAdapter;
+import com.cris.nvh.moviedb.data.model.Cast;
 import com.cris.nvh.moviedb.databinding.FragmentCastBinding;
 import com.cris.nvh.moviedb.ui.moviedetails.MovieDetailsViewModel;
 
@@ -49,11 +50,11 @@ public class CastFragment extends Fragment implements ActorAdapter.OnClickActorL
     }
 
     @Override
-    public void onClickActor(String id) {
-        mListener.onActorSelected(id);
+    public void onClickActor(Cast cast) {
+        mListener.onActorSelected(cast);
     }
 
     public interface OnActorSelectedListener {
-        void onActorSelected(String id);
+        void onActorSelected(Cast cast);
     }
 }

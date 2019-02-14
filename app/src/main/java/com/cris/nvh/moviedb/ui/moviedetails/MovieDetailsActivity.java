@@ -1,17 +1,25 @@
 package com.cris.nvh.moviedb.ui.moviedetails;
 
+import android.animation.Animator;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 
 import com.cris.nvh.moviedb.R;
 import com.cris.nvh.moviedb.adapter.MoviePagerAdapter;
+import com.cris.nvh.moviedb.data.annotation.CategoryRequest;
+import com.cris.nvh.moviedb.data.model.Cast;
+import com.cris.nvh.moviedb.data.model.Company;
 import com.cris.nvh.moviedb.data.model.Movie;
 import com.cris.nvh.moviedb.data.repository.MovieRepository;
 import com.cris.nvh.moviedb.data.source.local.FavoriteReaderDBHelper;
@@ -20,11 +28,15 @@ import com.cris.nvh.moviedb.data.source.remote.RemoteDataSource;
 import com.cris.nvh.moviedb.databinding.ActivityMovieDetailBinding;
 import com.cris.nvh.moviedb.ui.cast.CastFragment;
 import com.cris.nvh.moviedb.ui.info.InfoFragment;
+import com.cris.nvh.moviedb.ui.movies.MoviesActivity;
 import com.cris.nvh.moviedb.ui.producer.ProducerFragment;
 import com.cris.nvh.moviedb.ui.search.SearchActivity;
 import com.cris.nvh.moviedb.ui.trailer.TrailerFragment;
 
 import static com.cris.nvh.moviedb.ui.home.HomeFragment.EXTRA_MOVIE;
+import static com.cris.nvh.moviedb.ui.movies.MoviesActivity.EXTRA_MOVIES_TITLE;
+import static com.cris.nvh.moviedb.ui.movies.MoviesActivity.EXTRA_MOVIES_TYPE;
+import static com.cris.nvh.moviedb.ui.movies.MoviesActivity.EXTRA_TYPE_ID;
 
 /**
  * Created by nvh
@@ -37,9 +49,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements OnChangeV
     private static final int DURATION = 1000;
     private static final int FROMALPHA = 0;
     private static final int TOALPHA = 1;
+    private static final int HALF = 2;
     private VideoFragment mYoutubePlayerFragment;
     private ActivityMovieDetailBinding mBinding;
     private MovieDetailsViewModel mViewModel;
+    private boolean isDisplayed;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,6 +62,32 @@ public class MovieDetailsActivity extends AppCompatActivity implements OnChangeV
         initViewModel();
         mBinding.setMovieVM(mViewModel);
         initView();
+        show(mBinding.getRoot());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mViewModel.updateFavoriteMovie();
+    }
+
+    public void show(final View myView) {
+        myView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP)
+                    return;
+                if (!isDisplayed) {
+                    int cx = myView.getWidth() / HALF;
+                    int h = myView.getHeight();
+                    Animator anim = ViewAnimationUtils.createCircularReveal(myView, cx, cx, 0, h);
+                    anim.setDuration(DURATION);
+                    anim.start();
+                    isDisplayed = true;
+                }
+            }
+        });
     }
 
     @Override
@@ -82,16 +122,27 @@ public class MovieDetailsActivity extends AppCompatActivity implements OnChangeV
     }
 
     @Override
+    public void startMoviesActivity(int type, String name, String id) {
+        Intent intent = MoviesActivity.getIntent(this);
+        intent.putExtra(EXTRA_MOVIES_TYPE, type);
+        intent.putExtra(EXTRA_TYPE_ID, id);
+        intent.putExtra(EXTRA_MOVIES_TITLE, name);
+        startActivity(intent);
+    }
+
+    @Override
     public void onTrailerSelected(String videoKey) {
         mYoutubePlayerFragment.setVideoKey(videoKey);
     }
 
     @Override
-    public void onProducerSelected(String id) {
+    public void onProducerSelected(Company company) {
+        startMoviesActivity(CategoryRequest.COMPANY, company.getName(), String.valueOf(company.getId()));
     }
 
     @Override
-    public void onActorSelected(String id) {
+    public void onActorSelected(Cast cast) {
+        startMoviesActivity(CategoryRequest.CAST, cast.getName(), String.valueOf(cast.getId()));
     }
 
     private void initViewModel() {

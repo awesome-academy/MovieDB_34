@@ -1,6 +1,5 @@
 package com.cris.nvh.moviedb.data.source.local;
 
-import android.databinding.ObservableArrayList;
 import com.cris.nvh.moviedb.data.model.Movie;
 import com.cris.nvh.moviedb.data.source.MovieDataSource;
 
@@ -27,17 +26,17 @@ public class LocalDataSource implements MovieDataSource.Local {
 
     @Override
     public boolean insertToFavorite(Movie movie) {
-        return false;
+        return mDBHelper.addToFavorite(movie);
     }
 
     @Override
     public boolean deleteFromFavorite(int movieId) {
-        return false;
+        return mDBHelper.removeFromFavorite(movieId);
     }
 
     @Override
     public boolean isFavorite(int movieID) {
-        return false;
+        return mDBHelper.isFavoriteMovie(movieID);
     }
 
     @Override

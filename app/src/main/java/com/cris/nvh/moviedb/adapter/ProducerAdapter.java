@@ -62,7 +62,7 @@ public class ProducerAdapter extends RecyclerView.Adapter<ProducerAdapter.Produc
 
         @Override
         public void onClick(View view) {
-            mListener.onClickProducer(String.valueOf(mViewModel.company.get().getId()));
+            mListener.onClickProducer(mViewModel.company.get());
         }
 
         public ProducerViewHolder(ItemProducerBinding binding, OnClickProducerListener listener) {
@@ -71,6 +71,7 @@ public class ProducerAdapter extends RecyclerView.Adapter<ProducerAdapter.Produc
             mBinding = binding;
             mViewModel = new ItemProducerViewModel();
             mBinding.setProducerVM(mViewModel);
+            mBinding.imageProducer.setOnClickListener(this);
         }
 
         public void bindData(Company company) {
@@ -79,6 +80,6 @@ public class ProducerAdapter extends RecyclerView.Adapter<ProducerAdapter.Produc
     }
 
     public interface OnClickProducerListener {
-        void onClickProducer(String companyId);
+        void onClickProducer(Company company);
     }
 }

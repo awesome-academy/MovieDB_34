@@ -58,9 +58,16 @@ public class HomeFragment extends Fragment implements HomeNavigator, SlideAdapte
         mAdapter = new SlideAdapter(this);
         mHomeBinding.pagerImages.setAdapter(mAdapter);
         mHomeBinding.indicator.setupWithViewPager(mHomeBinding.pagerImages, true);
+        mHomeBinding.pagerImages.addOnPageChangeListener(this);
         mHomeBinding.recyclerCategories.setAdapter(new CategoryAdapter(this));
         mHomeBinding.recyclerGenres.setAdapter(new MoviesAdapter(this));
         return mHomeBinding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mHomeViewModel.updateFavoriteMovie();
     }
 
     @Override
@@ -104,7 +111,7 @@ public class HomeFragment extends Fragment implements HomeNavigator, SlideAdapte
 
     @Override
     public void onPageSelected(int i) {
-        mAdapter.setCurrentPosition(i);
+        SlideAdapter.setCurrentPosition(i);
     }
 
     @Override

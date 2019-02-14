@@ -71,7 +71,7 @@ public class BindingUtils {
         }
     }
 
-    @BindingAdapter({"bindCategories", "bindCategoryString"})
+    @BindingAdapter(value = {"bindCategories", "bindCategoryString"}, requireAll = false)
     public static void bindRecyclerCategories(RecyclerView recycler,
                                               ObservableList<ObservableList<Movie>> movies,
                                               ObservableList<String> categories) {
@@ -86,13 +86,9 @@ public class BindingUtils {
                                                   ObservableList<Movie> movies) {
         CategoryAdapter.CategoryViewHolder.MoviesAdapter adapter =
                 (CategoryAdapter.CategoryViewHolder.MoviesAdapter) recycler.getAdapter();
-        if (adapter != null) {
+        if (adapter != null && movies != null) {
             adapter.update(movies);
         }
-    }
-
-    @BindingAdapter("bindGenres")
-    public static void bindGenres(RecyclerView recycler, ObservableList<Genre> genres) {
     }
 
     @BindingAdapter("bindVideos")
@@ -116,7 +112,7 @@ public class BindingUtils {
     public static void setActorsForRecyclerView(RecyclerView recyclerView,
                                                 List<Cast> actors) {
         ActorAdapter adapter = (ActorAdapter) recyclerView.getAdapter();
-        if (adapter != null) {
+        if (adapter != null && actors != null) {
             adapter.update(actors);
         }
     }
@@ -129,6 +125,15 @@ public class BindingUtils {
     @BindingAdapter({"bindActorName", "bindActorCharacter"})
     public static void setActorName(TextView textView, String actorName, String actorCharacter) {
         textView.setText(new StringBuilder(actorName).append("/").append(actorCharacter).toString());
+    }
+
+    @BindingAdapter("bindImage")
+    public static void bindImageFavorite(ImageView imageView, boolean bool) {
+        if (bool) {
+            imageView.setImageResource(R.drawable.ic_favorite_red);
+            return;
+        }
+        imageView.setImageResource(R.drawable.ic_favorite);
     }
 
     @BindingAdapter("imageUrl")
@@ -153,9 +158,11 @@ public class BindingUtils {
                     public void run() {
                         if (pager.getCurrentItem() > pager.getChildCount() + PLUS) {
                             pager.setCurrentItem(FIRST_INDEX);
+                            SlideAdapter.setCurrentPosition(pager.getCurrentItem());
                             return;
                         }
                         pager.setCurrentItem(pager.getCurrentItem() + PLUS);
+                        SlideAdapter.setCurrentPosition(pager.getCurrentItem());
                     }
                 });
             }
